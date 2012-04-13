@@ -1,0 +1,94 @@
+{% extends layout %}
+
+{% block content %}
+	<form name="record-form" id="record-form" class="form-horizontal" method="post" action="">
+		<fieldset>
+			<div class="control-group">
+				<label class="control-label">{{ "user.username"|trans }}</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="username" id="username" value="{{ entity.id }}"
+						{{ isAdded ? 'disabled="disabled"' : '' }} />
+					{{ render_validation_error(validator, 'username') }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">{{ "user.name"|trans }}</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="name" id="name" value="{{ entity.name }}" />
+					{{ render_validation_error(validator, 'name') }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">{{ "user.password"|trans }}</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="password" id="password" autocomplete="off" />
+					{% if isAdded %}
+					<p class="help-block">{{ "user.password_empty_to_preserve"|trans }}</p>
+					{% endif %}
+					{{ render_validation_error(validator, 'password') }}
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">{{ "user.roles"|trans }}</label>
+				<div class="controls">
+					{% for role, title in roles %}
+						{% set hasRole = entity.hasRole(role) %}
+						{% set class = (role == 'all' ? 'fbold' : 'js-cbx-role') %}
+						<label class="checkbox {{ class }}">
+							<input type="checkbox" name="roles[]" id="role_{{ role }}"
+								value="{{ role }}"
+								{{ hasRole ? 'checked="checked"' : '' }} />
+								{{ title }}
+						</label>
+					{% endfor %}
+					{{ render_validation_error(validator, 'roles') }}
+				</div>
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					{{ "user.save"|trans }}
+				</button>
+
+				{% if isAdded %}
+				<button class="btn btn-danger" style="margin-left: 50px;" id="form-delete-btn">
+					{{ "user.delete"|trans }}
+				</button>
+				{% endif %}
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}
+
+{% block js %}
+	{{ parent() }}
+
+	$('#form-delete-btn').bind('click', function () {
+		if (confirm({{ "user.confirm_delete"|trans|json_encode|raw }})) {
+			$.ajax({
+				"url": {{ path('user.delete', {'id': entity.id, 'token': user_token('delete-user-' ~ entity.id)})|json_encode|raw }},
+				"type": "POST",
+				"dataType": "json",
+				"success": function (response) {
+					if (response.ok) {
+						window.location = {{ path_localized('user.manage')|json_encode|raw }};
+					} else {
+						alert("There was a problem. Refresh and retry.");
+					}
+				}
+			});
+		}
+		return false;
+	});
+
+	$('#role_all').bind('change', function () {
+		if ($(this).attr('checked')) {
+			$('.js-cbx-role input[type=checkbox]').attr('checked', false).attr('disabled', true);
+		} else {
+			$('.js-cbx-role input[type=checkbox]').attr('disabled', false);
+		}
+	}).trigger('change');
+
+	{% if not isAdded %}
+		$('#username').focus();
+	{% endif %}
+{% endblock %}

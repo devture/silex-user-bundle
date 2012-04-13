@@ -1,0 +1,12 @@
+{% extends layout %}
+
+{% block content %}
+	<a class="btn" href="{{ path_localized('user.add') }}">
+		<i class="icon-plus"></i>
+		{{ "user.add_new"|trans }}
+	</a>
+
+	<div class="top-spaced-minor"></div>
+
+	{% include "DevtureUserBundle/list.html.twig" with {'items': items} %}
+{% endblock %}
