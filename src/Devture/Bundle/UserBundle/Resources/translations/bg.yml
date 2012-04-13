@@ -1,0 +1,19 @@
+user:
+    no_items: Няма потребители.
+    users: Потребители
+    add_new: Добави нов
+    username: Потребител
+    password: Парола
+    name: Име
+    password_empty_to_preserve: Или оставете празно за да запазите старата.
+    save: Запази
+    delete: Изтрий
+    confirm_delete: Изтрий потребителя?
+    roles: Привилегии
+    logout: изход
+    log_in: Вход
+    wrong_credentials: Грешно потребителско име или парола.
+    validation:
+        password_empty: Паролата не може да бъде празна.
+        invalid_username: Невалидно потребителско име.
+        invalid_roles: Невалидни привилегии.

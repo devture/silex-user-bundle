@@ -1,0 +1,23 @@
+{
+	"user": {
+		"no_items": "No users.",
+		"users": "Users",
+		"add_new": "Add new",
+		"username": "Username",
+		"password": "Password",
+		"name": "Name",
+		"password_empty_to_preserve": "Or leave empty to preserve the old one.",
+		"save": "Save",
+		"delete": "Delete",
+		"confirm_delete": "Delete user?",
+		"roles": "Privileges",
+		"logout": "logout",
+		"log_in": "Log in",
+		"wrong_credentials": "Wrong username or password.",
+		"validation": {
+			"password_empty": "The password cannot be empty.",
+			"invalid_username": "Invalid username.",
+			"invalid_roles": "Invalid roles."
+		}
+	}
+}
