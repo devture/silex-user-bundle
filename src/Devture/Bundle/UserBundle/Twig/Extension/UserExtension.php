@@ -34,7 +34,7 @@ class UserExtension extends \Twig_Extension {
 		return $this->user !== null;
 	}
 
-	public function getuserToken($intention) {
+	public function getUserToken($intention) {
 		return $this->generator->generate($intention);
 	}
 
