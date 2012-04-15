@@ -17,6 +17,7 @@
 		"validation": {
 			"password_empty": "The password cannot be empty.",
 			"invalid_username": "Invalid username.",
+			"username_in_use": "The username is in use.",
 			"invalid_roles": "Invalid roles."
 		}
 	}

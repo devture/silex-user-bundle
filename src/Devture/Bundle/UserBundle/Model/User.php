@@ -7,15 +7,15 @@ class User extends BaseModel {
 	const ROLE_MASTER = 'all';
 
 	public function setUsername($value) {
-		$this->setId($value);
+		$this->setAttribute('username', $value);
 	}
 
 	public function getUsername() {
-		return $this->getId();
+		return $this->getAttribute('username', '');
 	}
 
-	public function setPassword($password) {
-		$this->setAttribute('password', $password);
+	public function setPassword($value) {
+		$this->setAttribute('password', $value);
 	}
 
 	public function getPassword() {

@@ -6,8 +6,7 @@
 			<div class="control-group">
 				<label class="control-label">{{ "user.username"|trans }}</label>
 				<div class="controls">
-					<input type="text" class="input-xlarge" name="username" id="username" value="{{ entity.id }}"
-						{{ isAdded ? 'disabled="disabled"' : '' }} />
+					<input type="text" class="input-xlarge" name="username" id="username" value="{{ entity.username }}" />
 					{{ render_validation_error(validator, 'username') }}
 				</div>
 			</div>

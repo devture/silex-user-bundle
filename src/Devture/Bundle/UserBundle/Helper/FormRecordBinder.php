@@ -14,10 +14,7 @@ class FormRecordBinder extends SetterRequestBinder {
 	}
 
 	public function bind(User $entity, Request $request, array $options = array()) {
-		$whitelisted = array('name', 'roles');
-		if (isset($options['bindUsername']) && $options['bindUsername']) {
-			$whitelisted[] = 'username';
-		}
+		$whitelisted = array('username', 'name', 'roles');
 		$this->bindWhitelisted($entity, $request->request->all(), $whitelisted);
 
 		$password = $request->request->get('password');
