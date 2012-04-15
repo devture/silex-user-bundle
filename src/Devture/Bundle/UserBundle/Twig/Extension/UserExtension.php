@@ -1,17 +1,12 @@
 <?php
 namespace Devture\Bundle\UserBundle\Twig\Extension;
-use Devture\Bundle\UserBundle\Model\User;
-use Devture\Bundle\UserBundle\Helper\TokenGenerator;
 
 class UserExtension extends \Twig_Extension {
 
-	protected $user;
+	protected $container;
 
-	protected $generator;
-
-	public function __construct(User $user = null, TokenGenerator $generator) {
-		$this->user = $user;
-		$this->generator = $generator;
+	public function __construct(\Pimple $container) {
+		$this->container = $container;
 	}
 
 	public function getName() {
@@ -27,15 +22,15 @@ class UserExtension extends \Twig_Extension {
 	}
 
 	public function getUser() {
-		return $this->user;
+		return $this->container['user'];
 	}
 
 	public function isLoggedIn() {
-		return $this->user !== null;
+		return $this->container['user'] !== null;
 	}
 
 	public function getUserToken($intention) {
-		return $this->generator->generate($intention);
+		return $this->container['user.token_generator']->generate($intention);
 	}
 
 }
