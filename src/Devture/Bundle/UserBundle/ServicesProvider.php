@@ -20,8 +20,8 @@ class ServicesProvider implements ServiceProviderInterface {
             return new \Devture\Bundle\UserBundle\Helper\TokenGenerator($config['token.validity_time'], $config['token.salt']);
         });
 
-        $app['user.repository'] = $app->share(function () use ($app) {
-            return new \Devture\Bundle\UserBundle\Repository\UserRepository($app['mongodb.database']);
+        $app['user.repository'] = $app->share(function () use ($app, $config) {
+            return new \Devture\Bundle\UserBundle\Repository\UserRepository($app[$config['database_service_id']]);
         });
 
         $app['user.password_encoder'] = $app->share(function () use ($app, $config) {
