@@ -35,14 +35,13 @@ class UserValidator extends BaseValidator {
             }
         }
 
-        if (!isset($options['skipUniquenessCheck'])
-                || !$options['skipUniquenessCheck']) {
-            try {
-                $this->repository->find($username);
+        try {
+            $user = $this->repository->findByUsername($username);
+            if ($user->getId() !== $entity->getId()) {
                 $this->set('username', 'user.validation.username_in_use');
-            } catch (NotFound $e) {
-
             }
+        } catch (NotFound $e) {
+
         }
     }
 

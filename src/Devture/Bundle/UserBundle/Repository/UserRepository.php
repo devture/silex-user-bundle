@@ -13,7 +13,12 @@ class UserRepository extends BaseMongoRepository {
     }
 
     public function ensureIndexes() {
+        $userCollection = $this->db->selectCollection($this->getCollectionName());
+        $userCollection->ensureIndex(array('username' => 1), array('unique' => true));
+    }
 
+    public function findByUsername($username) {
+        return $this->findOneBy(array('username' => $username));
     }
 
 }

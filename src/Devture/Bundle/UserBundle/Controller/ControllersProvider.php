@@ -58,7 +58,7 @@ class ControllersProvider implements ControllerProviderInterface {
             $validator = null;
 
             if ($request->getMethod() === 'POST') {
-                $app['user.form_record_binder']->bind($entity, $request, array('bindUsername' => true));
+                $app['user.form_record_binder']->bind($entity, $request);
                 $validator = $app['user.validator'];
                 if ($validator->isValid($entity)) {
                     $app['user.repository']->add($entity);
@@ -85,7 +85,7 @@ class ControllersProvider implements ControllerProviderInterface {
             if ($request->getMethod() === 'POST') {
                 $app['user.form_record_binder']->bind($entity, $request);
                 $validator = $app['user.validator'];
-                if ($validator->isValid($entity, array('skipUniquenessCheck' => true))) {
+                if ($validator->isValid($entity)) {
                     $app['user.repository']->update($entity);
                     return $app->redirect($app['url_generator_localized']->generate('user.manage'));
                 }

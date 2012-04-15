@@ -22,7 +22,7 @@ class AuthHelper {
 
     public function authenticate($username, $password) {
         try {
-            $user = $this->repository->find($username);
+            $user = $this->repository->findByUsername($username);
         } catch (NotFound $e) {
             return null;
         }
@@ -34,7 +34,7 @@ class AuthHelper {
 
     public function authenticateWithToken($username, $passwordToken) {
         try {
-            $user = $this->repository->find($username);
+            $user = $this->repository->findByUsername($username);
         } catch (NotFound $e) {
             return null;
         }
