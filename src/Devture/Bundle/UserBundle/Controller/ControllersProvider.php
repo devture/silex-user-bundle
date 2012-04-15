@@ -15,7 +15,7 @@ class ControllersProvider implements ControllerProviderInterface {
 
         $controllers->match('/login', function (Request $request) use ($app) {
             if ($app['user'] !== null) {
-                return $app->redirect($app['url_generator']->generate('homepage'));
+                return $app->redirect($app['url_generator_localized']->generate('homepage'));
             }
 
             $error = null;
@@ -25,7 +25,7 @@ class ControllersProvider implements ControllerProviderInterface {
                 $password = $request->request->get('password');
 
                 if ($user = $app['user.auth_helper']->authenticate($username, $password)) {
-                    $next = $request->query->has('next') ? $request->query->get('next') : $app['url_generator']->generate('homepage');
+                    $next = $request->query->has('next') ? $request->query->get('next') : $app['url_generator_localized']->generate('homepage');
                     $response = new RedirectResponse($next);
                     return $app['user.login_manager']->login($user, $response);
                 } else {
@@ -38,7 +38,7 @@ class ControllersProvider implements ControllerProviderInterface {
 
 
         $controllers->post('/logout/{token}', function ($token) use ($app) {
-            $response = new RedirectResponse($app['url_generator']->generate('homepage'));
+            $response = new RedirectResponse($app['url_generator_localized']->generate('homepage'));
             if ($app['user.token_generator']->isValid('logout', $token)) {
                 if ($app['user'] !== null) {
                     $app['user.login_manager']->logout($response);
@@ -62,7 +62,7 @@ class ControllersProvider implements ControllerProviderInterface {
                 $validator = $app['user.validator'];
                 if ($validator->isValid($entity)) {
                     $app['user.repository']->add($entity);
-                    return $app->redirect($app['url_generator']->generate('user.manage'));
+                    return $app->redirect($app['url_generator_localized']->generate('user.manage'));
                 }
             }
 
@@ -87,7 +87,7 @@ class ControllersProvider implements ControllerProviderInterface {
                 $validator = $app['user.validator'];
                 if ($validator->isValid($entity, array('skipUniquenessCheck' => true))) {
                     $app['user.repository']->update($entity);
-                    return $app->redirect($app['url_generator']->generate('user.manage'));
+                    return $app->redirect($app['url_generator_localized']->generate('user.manage'));
                 }
             }
 

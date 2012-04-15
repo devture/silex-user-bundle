@@ -28,7 +28,7 @@ class AccessControl {
 
     public function redirectToLogin() {
         $next = $this->app['request']->getRequestUri();
-        $url = $this->app['url_generator']->generate('user.login', array('next' => $next));
+        $url = $this->app['url_generator_localized']->generate('user.login', array('next' => $next));
         return new RedirectResponse($url);
     }
 
