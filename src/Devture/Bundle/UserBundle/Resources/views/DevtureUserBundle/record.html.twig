@@ -7,14 +7,14 @@
 				<label class="control-label">{{ "user.username"|trans }}</label>
 				<div class="controls">
 					<input type="text" class="input-xlarge" name="username" id="username" value="{{ entity.username }}" />
-					{{ render_validation_error(validator, 'username') }}
+					{{ render_validation_errors(validator, 'username') }}
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">{{ "user.name"|trans }}</label>
 				<div class="controls">
 					<input type="text" class="input-xlarge" name="name" id="name" value="{{ entity.name }}" />
-					{{ render_validation_error(validator, 'name') }}
+					{{ render_validation_errors(validator, 'name') }}
 				</div>
 			</div>
 			<div class="control-group">
@@ -24,7 +24,7 @@
 					{% if isAdded %}
 					<p class="help-block">{{ "user.password_empty_to_preserve"|trans }}</p>
 					{% endif %}
-					{{ render_validation_error(validator, 'password') }}
+					{{ render_validation_errors(validator, 'password') }}
 				</div>
 			</div>
 			<div class="control-group">
@@ -40,7 +40,7 @@
 								{{ title }}
 						</label>
 					{% endfor %}
-					{{ render_validation_error(validator, 'roles') }}
+					{{ render_validation_errors(validator, 'roles') }}
 				</div>
 			</div>
 			<div class="form-actions">
