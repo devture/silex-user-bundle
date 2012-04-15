@@ -48,9 +48,10 @@ class ServicesProvider implements ServiceProviderInterface {
             return new \Devture\Bundle\UserBundle\Helper\FormRecordBinder($app['user.password_encoder']);
         });
 
-        foreach ($app['locales'] as $key => $_localeData) {
-            $catalogueFile = dirname(__FILE__) . '/Resources/translations/' . $key . '.json';
-            $app['translator']->addResource('array', $catalogueFile, $key);
+        foreach (glob(dirname(__FILE__) . '/Resources/translations/*.json') as $filePath) {
+            $parts = explode('/', $filePath);
+            list($localeKey, $_extension) = explode('.', array_pop($parts));
+            $app['translator']->addResource('array', $filePath, $localeKey);
         }
 
         $viewsPath = dirname(__FILE__) . '/Resources/views/';
