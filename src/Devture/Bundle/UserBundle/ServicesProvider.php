@@ -14,6 +14,8 @@ class ServicesProvider implements ServiceProviderInterface {
     public function register(Application $app) {
         $config = $this->config;
 
+        $app['user'] = null;
+
         $app['user.roles'] = $config['roles'];
 
         $app['user.token_generator'] = $app->share(function () use ($config) {
@@ -59,9 +61,10 @@ class ServicesProvider implements ServiceProviderInterface {
 
         $app->before(function () use ($app) {
             $app['user'] = $app['user.login_manager']->createFromRequest($app['request']);
-            $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app['user'], $app['user.token_generator']));
-            $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\AccessControlExtension($app['user.access_control']));
         });
+
+        $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app));
+        $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\AccessControlExtension($app['user.access_control']));
     }
 
 }
