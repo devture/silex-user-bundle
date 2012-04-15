@@ -37,10 +37,12 @@ class ControllersProvider implements ControllerProviderInterface {
 		})->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.login');
 
 
-		$controllers->get('/logout', function () use ($app) {
+		$controllers->post('/logout/{token}', function ($token) use ($app) {
 			$response = new RedirectResponse($app['url_generator']->generate('homepage'));
-			if ($app['user'] !== null) {
-				$app['user.login_manager']->logout($response);
+			if ($app['user.token_generator']->isValid('logout', $token)) {
+				if ($app['user'] !== null) {
+					$app['user.login_manager']->logout($response);
+				}
 			}
 			return $response;
 		})->value('locale', $app['default_locale'])->bind('user.logout');
