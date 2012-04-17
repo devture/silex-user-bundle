@@ -39,7 +39,7 @@ class ControllersProvider implements ControllerProviderInterface {
 
 		$controllers->post('/logout/{token}', function ($token) use ($app) {
 			$response = new RedirectResponse($app['url_generator_localized']->generate('homepage'));
-			if ($app['user.token_generator']->isValid('logout', $token)) {
+			if ($app['shared.csrf_token_generator']->isValid('logout', $token)) {
 				if ($app['user'] !== null) {
 					$app['user.login_manager']->logout($response);
 				}
@@ -99,7 +99,7 @@ class ControllersProvider implements ControllerProviderInterface {
 
 		$controllers->post('/delete/{id}/{token}', function (Request $request, $id, $token) use ($app) {
 			$intention = 'delete-user-' . $id;
-			if ($app['user.token_generator']->isValid($intention, $token)) {
+			if ($app['shared.csrf_token_generator']->isValid($intention, $token)) {
 				try {
 					$app['user.repository']->delete($app['user.repository']->find($id));
 				} catch (NotFound $e) {

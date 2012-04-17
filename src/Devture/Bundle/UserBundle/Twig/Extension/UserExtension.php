@@ -17,7 +17,6 @@ class UserExtension extends \Twig_Extension {
 		return array(
 			'get_user' => new \Twig_Function_Method($this, 'getUser'),
 			'is_logged_in' => new \Twig_Function_Method($this, 'isLoggedIn'),
-			'user_token' => new \Twig_Function_Method($this, 'getUserToken'),
 		);
 	}
 
@@ -27,10 +26,6 @@ class UserExtension extends \Twig_Extension {
 
 	public function isLoggedIn() {
 		return $this->container['user'] !== null;
-	}
-
-	public function getUserToken($intention) {
-		return $this->container['user.token_generator']->generate($intention);
 	}
 
 }
