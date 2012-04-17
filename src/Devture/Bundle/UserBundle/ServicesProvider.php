@@ -52,13 +52,11 @@ class ServicesProvider implements ServiceProviderInterface {
 
         $app['localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
-        $viewsPath = dirname(__FILE__) . '/Resources/views/';
-        $app['twig.loader']->addLoader(new \Twig_Loader_Filesystem($viewsPath));
-
         $app->before(function () use ($app) {
             $app['user'] = $app['user.login_manager']->createFromRequest($app['request']);
         });
 
+        $app['twig.loader']->addLoader(new \Twig_Loader_Filesystem(dirname(__FILE__) . '/Resources/views/'));
         $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app));
         $app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\AccessControlExtension($app['user.access_control']));
     }
