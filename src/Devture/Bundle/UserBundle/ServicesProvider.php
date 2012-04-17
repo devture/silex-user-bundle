@@ -50,11 +50,7 @@ class ServicesProvider implements ServiceProviderInterface {
 			return new \Devture\Bundle\UserBundle\Helper\FormRecordBinder($app['user.password_encoder']);
 		});
 
-		foreach (glob(dirname(__FILE__) . '/Resources/translations/*.json') as $filePath) {
-			$parts = explode('/', $filePath);
-			list($localeKey, $_extension) = explode('.', array_pop($parts));
-			$app['translator']->addResource('array', $filePath, $localeKey);
-		}
+		$app['localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
 		$viewsPath = dirname(__FILE__) . '/Resources/views/';
 		$app['twig.loader']->addLoader(new \Twig_Loader_Filesystem($viewsPath));
