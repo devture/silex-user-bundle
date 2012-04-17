@@ -64,7 +64,7 @@
     $('#form-delete-btn').bind('click', function () {
         if (confirm({{ "user.confirm_delete"|trans|json_encode|raw }})) {
             $.ajax({
-                "url": {{ path('user.delete', {'id': entity.id, 'token': user_token('delete-user-' ~ entity.id)})|json_encode|raw }},
+                "url": {{ path('user.delete', {'id': entity.id, 'token': csrf_token('delete-user-' ~ entity.id)})|json_encode|raw }},
                 "type": "POST",
                 "dataType": "json",
                 "success": function (response) {

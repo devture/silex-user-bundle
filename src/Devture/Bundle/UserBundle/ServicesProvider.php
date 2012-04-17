@@ -18,10 +18,6 @@ class ServicesProvider implements ServiceProviderInterface {
 
         $app['user.roles'] = $config['roles'];
 
-        $app['user.token_generator'] = $app->share(function () use ($config) {
-            return new \Devture\Bundle\UserBundle\Helper\TokenGenerator($config['token.validity_time'], $config['token.salt']);
-        });
-
         $app['user.repository'] = $app->share(function () use ($app, $config) {
             return new \Devture\Bundle\UserBundle\Repository\UserRepository($app[$config['database_service_id']]);
         });
