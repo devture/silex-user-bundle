@@ -55,19 +55,18 @@ class ControllersProvider implements ControllerProviderInterface {
 
 		$controllers->match('/add', function (Request $request) use ($app) {
 			$entity = $app['user.repository']->createModel(array());
-			$validator = null;
 
-			if ($request->getMethod() === 'POST') {
-				$app['user.form_record_binder']->bind($entity, $request);
-				$validator = $app['user.validator'];
-				if ($validator->isValid($entity)) {
-					$app['user.repository']->add($entity);
-					return $app->redirect($app['url_generator_localized']->generate('user.manage'));
-				}
+			$binder = $app['user.form_binder'];
+
+			if ($request->getMethod() === 'POST' && $binder->bindProtectedRequest($entity, $request)) {
+				$app['user.repository']->add($entity);
+				return $app->redirect($app['url_generator_localized']->generate('user.manage'));
 			}
 
 			return $app['twig']->render('DevtureUserBundle/record.html.twig', array(
-				'entity' => $entity, 'isAdded' => false, 'validator' => $validator,
+				'entity' => $entity,
+				'isAdded' => false,
+				'form' => $binder,
 				'roles' => $app['user.roles'],
 			));
 		})->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.add');
@@ -80,19 +79,17 @@ class ControllersProvider implements ControllerProviderInterface {
 				return $app->abort(404);
 			}
 
-			$validator = null;
+			$binder = $app['user.form_binder'];
 
-			if ($request->getMethod() === 'POST') {
-				$app['user.form_record_binder']->bind($entity, $request);
-				$validator = $app['user.validator'];
-				if ($validator->isValid($entity)) {
-					$app['user.repository']->update($entity);
-					return $app->redirect($app['url_generator_localized']->generate('user.manage'));
-				}
+			if ($request->getMethod() === 'POST' && $binder->bindProtectedRequest($entity, $request)) {
+				$app['user.repository']->update($entity);
+				return $app->redirect($app['url_generator_localized']->generate('user.manage'));
 			}
 
 			return $app['twig']->render('DevtureUserBundle/record.html.twig', array(
-				'entity' => $entity, 'isAdded' => true, 'validator' => $validator,
+				'entity' => $entity,
+				'isAdded' => true,
+				'form' => $binder,
 				'roles' => $app['user.roles'],
 			));
 		})->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.edit');

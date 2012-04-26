@@ -42,9 +42,11 @@ class ServicesProvider implements ServiceProviderInterface {
 			return new \Devture\Bundle\UserBundle\Validator\UserValidator($app['user.repository'], $app['user.roles']);
 		};
 
-		$app['user.form_record_binder'] = $app->share(function () use ($app) {
-			return new \Devture\Bundle\UserBundle\Helper\FormRecordBinder($app['user.password_encoder']);
-		});
+		$app['user.form_binder'] = function () use ($app) {
+			$binder = new \Devture\Bundle\UserBundle\Form\FormBinder($app['user.validator'], $app['user.password_encoder']);
+			$binder->setCsrfProtection($app['shared.csrf_token_generator'], 'user');
+			return $binder;
+		};
 
 		$app['localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
