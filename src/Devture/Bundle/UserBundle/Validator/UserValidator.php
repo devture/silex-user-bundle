@@ -16,21 +16,21 @@ class UserValidator extends BaseValidator {
     }
 
     public function validate(User $entity, array $options = array()) {
-        parent::validate($entity, $options);
+        $violations = parent::validate($entity, $options);
 
         if ($entity->getPassword() === '' || $entity->getPassword() === null) {
-            $this->set('password', 'user.validation.password_empty');
+            $violations->add('password', 'user.validation.password_empty');
         }
 
         $username = $entity->getUsername();
         if (strlen($username) < 3
                 || !preg_match("/^[a-z][a-z0-9\._]+$/", $username)) {
-            $this->set('username', 'user.validation.invalid_username');
+            $violations->add('username', 'user.validation.invalid_username');
         }
 
         foreach ($entity->getRoles() as $role) {
             if (!in_array($role, $this->knownRoles)) {
-                $this->set('roles', 'user.validation.invalid_roles');
+                $violations->add('roles', 'user.validation.invalid_roles');
                 break;
             }
         }
@@ -38,11 +38,13 @@ class UserValidator extends BaseValidator {
         try {
             $user = $this->repository->findByUsername($username);
             if ($user->getId() !== $entity->getId()) {
-                $this->set('username', 'user.validation.username_in_use');
+                $violations->add('username', 'user.validation.username_in_use');
             }
         } catch (NotFound $e) {
 
         }
+
+        return $violations;
     }
 
 }
