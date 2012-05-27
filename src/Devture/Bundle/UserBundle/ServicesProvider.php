@@ -47,7 +47,9 @@ class ServicesProvider implements ServiceProviderInterface {
             $binder->setCsrfProtection($app['shared.csrf_token_generator'], 'user');
             return $binder;
         };
+    }
 
+    public function boot(Application $app) {
         $app['localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
         $app->before(function () use ($app) {
