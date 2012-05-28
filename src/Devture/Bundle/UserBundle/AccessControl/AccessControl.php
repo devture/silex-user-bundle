@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 class AccessControl {
 
     private $app;
-    private $routeProtectionBound = false;
     private $routeProtectors = array();
 
     public function __construct(\Silex\Application $app) {
@@ -32,25 +31,28 @@ class AccessControl {
         return new RedirectResponse($url);
     }
 
-    private function bindRouteProtection() {
-        if ($this->routeProtectionBound) {
-            return;
-        }
-        $this->routeProtectionBound = true;
+    public function getEnforcer() {
+        return array($this, 'enforceProtection');
+    }
 
-        $self = $this;
-        $app = $this->app;
-        $routeProtectors = &$this->routeProtectors;
-        $app->before(function (Request $request) use ($self, $app, &$routeProtectors) {
-            foreach ($routeProtectors as $protector) {
-                if ($protector->shouldProtect($request)) {
-                    if ($self->isLoggedIn()) {
-                        return $app->abort(401);
-                    }
-                    return $self->redirectToLogin();
+    /**
+     * SilexEvents::BEFORE ($app->before()) filter,
+     * meant to return a response short-circuiting application execution,
+     * when working with a Request that should be protected in a way.
+     *
+     * When doing protection, a response could be of 2 types:
+     *  1. "401 Not Authorized"
+     *  2. Redirect to login page
+     **/
+    public function enforceProtection(Request $request) {
+        foreach ($this->routeProtectors as $protector) {
+            if ($protector->shouldProtect($request)) {
+                if ($this->isLoggedIn()) {
+                    return $this->app->abort(401);
                 }
+                return $this->redirectToLogin();
             }
-        });
+        }
     }
 
     public function protectRoute($routeName, $requiredRole) {
@@ -62,7 +64,6 @@ class AccessControl {
     }
 
     public function addRouteProtector(RouteProtectorInterface $protector) {
-        $this->bindRouteProtection();
         $this->routeProtectors[] = $protector;
     }
 
