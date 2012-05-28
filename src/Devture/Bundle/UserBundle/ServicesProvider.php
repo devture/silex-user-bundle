@@ -56,6 +56,8 @@ class ServicesProvider implements ServiceProviderInterface {
 			$app['user'] = $app['user.login_manager']->createFromRequest($app['request']);
 		});
 
+		$app->before($app['user.access_control']->getEnforcer());
+
 		$app['twig.loader']->addLoader(new \Twig_Loader_Filesystem(dirname(__FILE__) . '/Resources/views/'));
 		$app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app));
 		$app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\AccessControlExtension($app['user.access_control']));
