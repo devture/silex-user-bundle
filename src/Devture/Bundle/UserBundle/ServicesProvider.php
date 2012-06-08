@@ -47,6 +47,10 @@ class ServicesProvider implements ServiceProviderInterface {
 			$binder->setCsrfProtection($app['shared.csrf_token_generator'], 'user');
 			return $binder;
 		};
+
+		$app['user.controllers_provider.management'] = $app->share(function () {
+			return new \Devture\Bundle\UserBundle\Controller\ControllersProvider();
+		});
 	}
 
 	public function boot(Application $app) {
