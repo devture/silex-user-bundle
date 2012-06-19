@@ -1,6 +1,5 @@
 <?php
 namespace Devture\Bundle\UserBundle\Controller;
-use Silex\ControllerCollection;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +9,7 @@ use Devture\Bundle\SharedBundle\Exception\NotFound;
 class ControllersProvider implements ControllerProviderInterface {
 
 	public function connect(Application $app) {
-		$controllers = new ControllerCollection();
+		$controllers = $app['controllers_factory'];
 
 
 		$controllers->match('/login', function (Request $request) use ($app) {
