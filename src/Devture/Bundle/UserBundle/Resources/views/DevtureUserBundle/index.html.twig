@@ -1,10 +1,12 @@
 {% extends layout %}
 
 {% block content %}
-    <a class="btn" href="{{ path_localized('user.add') }}">
-        <i class="icon-plus"></i>
-        {{ "user.add_new"|trans }}
-    </a>
+    <div class="clearfix">
+        <a class="btn pull-right" href="{{ path_localized('user.add') }}">
+            <i class="icon-plus"></i>
+            {{ "user.add_new"|trans }}
+        </a>
+    </div>
 
     <div class="top-spaced-minor"></div>
 
