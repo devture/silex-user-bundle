@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Controller;
+
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;

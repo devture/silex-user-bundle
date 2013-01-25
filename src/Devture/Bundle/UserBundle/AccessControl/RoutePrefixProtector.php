@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\AccessControl;
+
 use Symfony\Component\HttpFoundation\Request;
 use Devture\Bundle\UserBundle\AccessControl\RouteProtectorInterface;
 

@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle;
+
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 

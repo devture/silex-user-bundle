@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Form;
+
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Validator\UserValidator;
 use Devture\Bundle\UserBundle\Helper\BlowfishPasswordEncoder;

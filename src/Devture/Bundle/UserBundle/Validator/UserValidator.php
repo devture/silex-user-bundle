@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Validator;
+
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepository;
 use Devture\Bundle\SharedBundle\Validator\BaseValidator;

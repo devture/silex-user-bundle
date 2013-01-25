@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
+
 use Devture\Bundle\UserBundle\Repository\UserRepository;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\SharedBundle\Exception\NotFound;

@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -91,4 +92,3 @@ class LoginManager {
     }
 
 }
-

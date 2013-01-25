@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\AccessControl;
+
 use Devture\Bundle\UserBundle\Model\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Twig\Extension;
+
 use Devture\Bundle\UserBundle\AccessControl\AccessControl;
 
 class AccessControlExtension extends \Twig_Extension {
