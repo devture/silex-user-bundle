@@ -1,6 +1,7 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
-use Devture\Bundle\UserBundle\Repository\UserRepository;
+
+use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\SharedBundle\Exception\NotFound;
 
@@ -10,7 +11,7 @@ class AuthHelper {
 	private $encoder;
 	private $passwordTokenSalt;
 
-	public function __construct(UserRepository $repository, BlowfishPasswordEncoder $encoder, $passwordTokenSalt) {
+	public function __construct(UserRepositoryInterface $repository, BlowfishPasswordEncoder $encoder, $passwordTokenSalt) {
 		$this->repository = $repository;
 		$this->encoder = $encoder;
 		$this->passwordTokenSalt = $passwordTokenSalt;

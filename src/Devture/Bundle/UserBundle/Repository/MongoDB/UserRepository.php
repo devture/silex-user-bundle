@@ -1,14 +1,16 @@
 <?php
-namespace Devture\Bundle\UserBundle\Repository;
+namespace Devture\Bundle\UserBundle\Repository\MongoDB;
+
 use Devture\Bundle\SharedBundle\Repository\BaseMongoRepository;
+use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 
-class UserRepository extends BaseMongoRepository {
+class UserRepository extends BaseMongoRepository implements UserRepositoryInterface {
 
-	public function getModelClass() {
+	protected function getModelClass() {
 		return '\\Devture\Bundle\\UserBundle\\Model\\User';
 	}
 
-	public function getCollectionName() {
+	protected function getCollectionName() {
 		return 'user';
 	}
 

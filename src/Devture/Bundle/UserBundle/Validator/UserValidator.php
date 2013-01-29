@@ -1,7 +1,7 @@
 <?php
 namespace Devture\Bundle\UserBundle\Validator;
 use Devture\Bundle\UserBundle\Model\User;
-use Devture\Bundle\UserBundle\Repository\UserRepository;
+use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\SharedBundle\Validator\BaseValidator;
 use Devture\Bundle\SharedBundle\Exception\NotFound;
 
@@ -10,7 +10,7 @@ class UserValidator extends BaseValidator {
 	private $repository;
 	private $knownRoles;
 
-	public function __construct(UserRepository $repository, array $knownRoles) {
+	public function __construct(UserRepositoryInterface $repository, array $knownRoles) {
 		$this->repository = $repository;
 		$this->knownRoles = array_keys($knownRoles);
 	}

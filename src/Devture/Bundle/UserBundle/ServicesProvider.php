@@ -8,6 +8,10 @@ class ServicesProvider implements ServiceProviderInterface {
 	private $config;
 
 	public function __construct(array $config) {
+		$config = array_merge(array(
+			'database_type' => 'mongodb', //relational, mongodb
+		), $config);
+
 		$this->config = $config;
 	}
 
@@ -18,9 +22,21 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app['user.roles'] = $config['roles'];
 
-		$app['user.repository'] = $app->share(function () use ($app, $config) {
-			return new \Devture\Bundle\UserBundle\Repository\UserRepository($app[$config['database_service_id']]);
+		$app['user.db'] = $app->share(function () use ($app, $config) {
+			return $app[$config['database_service_id']];
 		});
+
+		if ($config['database_type'] === 'relational') {
+			$app['user.repository'] = $app->share(function () use ($app) {
+				return new \Devture\Bundle\UserBundle\Repository\Relational\UserRepository($app['user.db']);
+			});
+		} else if ($config['database_type'] === 'mongodb') {
+			$app['user.repository'] = $app->share(function () use ($app) {
+				return new \Devture\Bundle\UserBundle\Repository\MongoDB\UserRepository($app['user.db']);
+			});
+		} else {
+			throw new \InvalidArgumentException('Unrecognized database type: ' . $config['database_type']);
+		}
 
 		$app['user.password_encoder'] = $app->share(function () use ($app, $config) {
 			return new \Devture\Bundle\UserBundle\Helper\BlowfishPasswordEncoder($config['blowfish_cost']);
