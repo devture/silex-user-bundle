@@ -77,6 +77,8 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app['user.controller.user'] = $app->share(function ($app) {
 			return new Controller\UserController($app, 'user');
 		});
+
+		$app['user.public_routes'] = array('user.login', 'user.logout', 'user.logged_out');
 	}
 
 	public function boot(Application $app) {
