@@ -12,6 +12,10 @@ class ServicesProvider implements ServiceProviderInterface {
 	public function __construct(array $config) {
 		$config = array_merge(array(
 			'database_type' => 'mongodb', //relational, mongodb
+			'browser_id' => array(
+				'enabled' => false,
+				'audience' => null,
+			)
 		), $config);
 
 		$this->config = $config;
@@ -23,6 +27,15 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app['user'] = null;
 
 		$app['user.roles'] = $config['roles'];
+
+		$app['user.browser_id.enabled'] = $config['browser_id']['enabled'];
+		$app['user.browser_id.audience'] = $config['browser_id']['audience'];
+
+		if ($app['user.browser_id.enabled']) {
+			$app['user.browser_id.verifier'] = function ($app) {
+				return new \browserid\Verifier($app['user.browser_id.audience']);
+			};
+		}
 
 		$app['user.db'] = $app->share(function ($app) use ($config) {
 			return $app[$config['database_service_id']];
@@ -45,7 +58,11 @@ class ServicesProvider implements ServiceProviderInterface {
 		});
 
 		$app['user.auth_helper'] = $app->share(function ($app) use ($config) {
-			return new Helper\AuthHelper($app['user.repository'], $app['user.password_encoder'], $config['password_token_salt']);
+			$helper = new Helper\AuthHelper($app['user.repository'], $app['user.password_encoder'], $config['password_token_salt']);
+			if ($app['user.browser_id.enabled']) {
+				$helper->setBrowserIdVerifier($app['user.browser_id.verifier']);
+			}
+			return $helper;
 		});
 
 		$app['user.login_manager'] = $app->share(function ($app) use ($config) {
@@ -70,15 +87,21 @@ class ServicesProvider implements ServiceProviderInterface {
 	}
 
 	private function registerControllerServices(Application $app) {
-		$app['user.controllers_provider.management'] = $app->share(function () {
-			return new Controller\ControllersProvider();
+		$app['user.controllers_provider.management'] = $app->share(function ($app) {
+			return new Controller\ControllersProvider($app['user.browser_id.enabled']);
 		});
 
 		$app['user.controller.user'] = $app->share(function ($app) {
 			return new Controller\UserController($app, 'user');
 		});
 
-		$app['user.public_routes'] = array('user.login', 'user.logout', 'user.logged_out');
+		if ($app['user.browser_id.enabled']) {
+			$app['user.controller.browser_id'] = $app->share(function ($app) {
+				return new Controller\BrowserIdController($app, 'user');
+			});
+		}
+
+		$app['user.public_routes'] = array('user.login', 'user.browser_id.login', 'user.logout', 'user.logged_out');
 	}
 
 	public function boot(Application $app) {

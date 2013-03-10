@@ -1,15 +1,17 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
 
+use browserid\Verifier;
+use Devture\Bundle\SharedBundle\Exception\NotFound;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\UserBundle\Model\User;
-use Devture\Bundle\SharedBundle\Exception\NotFound;
 
 class AuthHelper {
 
 	private $repository;
 	private $encoder;
 	private $passwordTokenSalt;
+	private $browserIdVerifier;
 
 	public function __construct(UserRepositoryInterface $repository, BlowfishPasswordEncoder $encoder, $passwordTokenSalt) {
 		$this->repository = $repository;
@@ -17,8 +19,8 @@ class AuthHelper {
 		$this->passwordTokenSalt = $passwordTokenSalt;
 	}
 
-	protected function isPasswordMatching(User $user, $password) {
-		return $this->encoder->isPasswordValid($user->getPassword(), $password);
+	public function setBrowserIdVerifier(Verifier $verifier) {
+		$this->browserIdVerifier = $verifier;
 	}
 
 	public function authenticate($username, $password) {
@@ -45,8 +47,27 @@ class AuthHelper {
 		return $user;
 	}
 
+	public function authenticateWithBrowserIdAssertion($assertion) {
+		try {
+			$response = $this->browserIdVerifier->verify($assertion);
+			if ($response->status === 'okay' && $response->email !== null) {
+				return $this->repository->findByEmail($response->email);
+			}
+		} catch (\browserid\Exception $e) {
+
+		} catch (NotFound $e) {
+
+		}
+
+		return null;
+	}
+
 	public function createPasswordToken(User $user) {
 		return hash('sha256', $this->passwordTokenSalt . $user->getPassword());
+	}
+
+	private function isPasswordMatching(User $user, $password) {
+		return $this->encoder->isPasswordValid($user->getPassword(), $password);
 	}
 
 }

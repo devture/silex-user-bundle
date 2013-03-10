@@ -4,4 +4,16 @@
 	<div class="text-center">
 		{{ "user.logged_out_successfully"|trans }}
 	</div>
+
+	{% if app['user.browser_id.enabled'] %}
+		<script src="https://login.persona.org/include.js"></script>
+	{% endif %}
+{% endblock %}
+
+{% block js %}
+	{{ parent() }}
+
+	{% if app['user.browser_id.enabled'] %}
+		navigator.id.logout();
+	{% endif %}
 {% endblock %}

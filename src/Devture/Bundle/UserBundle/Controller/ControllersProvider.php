@@ -6,11 +6,22 @@ use Silex\ControllerProviderInterface;
 
 class ControllersProvider implements ControllerProviderInterface {
 
+	private $browserIdEnabled;
+
+	public function __construct($browserIdEnabled) {
+		$this->browserIdEnabled = $browserIdEnabled;
+	}
+
 	public function connect(Application $app) {
 		$controllers = $app['controllers_factory'];
 
 		$controllers->match('/login', 'user.controller.user:loginAction')
 			->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.login');
+
+		if ($this->browserIdEnabled) {
+			$controllers->post('/_login/browser-id', 'user.controller.browser_id:loginAction')
+				->value('locale', $app['default_locale'])->bind('user.browser_id.login');
+		}
 
 		$controllers->post('/logout/{token}', 'user.controller.user:logoutAction')
 			->value('locale', $app['default_locale'])->bind('user.logout');

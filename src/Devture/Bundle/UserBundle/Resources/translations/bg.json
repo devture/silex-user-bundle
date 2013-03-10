@@ -16,6 +16,12 @@
 		"log_in": "Вход",
 		"wrong_credentials": "Грешно потребителско име или парола.",
 		"logged_out_successfully": "Успешно излязохте от системата.",
+		"browser_id": {
+			"or": "или",
+			"log_in_with_your_email_address": "влезте с имейл адреса си",
+			"logging_you_in": "Влизане в системата.. Моля изчакайте..",
+			"unknown_email_or_other_login_failure": "Непознат имейл адрес или друга грешка по време на вход."
+		},
 		"validation": {
 			"password_empty": "Паролата не може да бъде празна.",
 			"invalid_username": "Невалидно потребителско име.",

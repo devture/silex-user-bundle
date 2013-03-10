@@ -2,11 +2,7 @@
 namespace Devture\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Devture\Bundle\SharedBundle\Controller\BaseController;
 use Devture\Bundle\SharedBundle\Exception\NotFound;
-use Devture\Bundle\UserBundle\Helper\AuthHelper;
-use Devture\Bundle\UserBundle\Helper\LoginManager;
-use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 
 class UserController extends BaseController {
 
@@ -112,31 +108,6 @@ class UserController extends BaseController {
 			return $this->json(array('ok' => true));
 		}
 		return $this->json(array());
-	}
-
-	/**
-	 * @return AuthHelper
-	 */
-	private function getAuthHelper() {
-		return $this->getNs('auth_helper');
-	}
-
-	/**
-	 * @return LoginManager
-	 */
-	private function getLoginManager() {
-		return $this->getNs('login_manager');
-	}
-
-	/**
-	 * @return UserRepositoryInterface
-	 */
-	private function getRepository() {
-		return $this->getNs('repository');
-	}
-
-	private function getHomepageUrl() {
-		return $this->get('url_generator_localized')->generate('homepage');
 	}
 
 }

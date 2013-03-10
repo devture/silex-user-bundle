@@ -16,6 +16,12 @@
 		"log_in": "Log in",
 		"wrong_credentials": "Wrong username or password.",
 		"logged_out_successfully": "You logged out successfully.",
+		"browser_id": {
+			"or": "or",
+			"log_in_with_your_email_address": "log in with your email address",
+			"logging_you_in": "Logging you in.. Please wait..",
+			"unknown_email_or_other_login_failure": "Unknown email address or other login failure."
+		},
 		"validation": {
 			"password_empty": "The password cannot be empty.",
 			"invalid_username": "Invalid username.",
