@@ -64,8 +64,16 @@ class ServicesProvider implements ServiceProviderInterface {
 			return $binder;
 		};
 
+		$this->registerControllerServices($app);
+	}
+
+	private function registerControllerServices(Application $app) {
 		$app['user.controllers_provider.management'] = $app->share(function () {
-			return new \Devture\Bundle\UserBundle\Controller\ControllersProvider();
+			return new Controller\ControllersProvider();
+		});
+
+		$app['user.controller.user'] = $app->share(function (Application $app) {
+			return new Controller\UserController($app, 'user');
 		});
 	}
 

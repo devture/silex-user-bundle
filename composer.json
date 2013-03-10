@@ -8,7 +8,9 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3.0"
+		"php": ">=5.3.0",
+		"devture/silex-shared-bundle": ">=1.1",
+		"devture/silex-localization-bundle": ">=1.1"
 	},
 	"autoload": {
 		"psr-0": {
