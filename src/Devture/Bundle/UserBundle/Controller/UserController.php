@@ -41,10 +41,18 @@ class UserController extends BaseController {
 		$response = $this->redirect($this->getHomepageUrl());
 		if ($this->get('shared.csrf_token_generator')->isValid('logout', $token)) {
 			if ($this->get('user') !== null) {
+				$response = $this->redirect($this->generateUrlNsLocalized('logged_out'));
 				$this->getLoginManager()->logout($response);
 			}
 		}
 		return $response;
+	}
+
+	public function loggedOutAction() {
+		if ($this->get('user') !== null) {
+			return $this->redirect($this->getHomepageUrl());
+		}
+		return $this->renderView('DevtureUserBundle/logged_out.html.twig');
 	}
 
 	public function manageAction() {

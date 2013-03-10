@@ -14,6 +14,7 @@
 		"logout": "изход",
 		"log_in": "Вход",
 		"wrong_credentials": "Грешно потребителско име или парола.",
+		"logged_out_successfully": "Успешно излязохте от системата.",
 		"validation": {
 			"password_empty": "Паролата не може да бъде празна.",
 			"invalid_username": "Невалидно потребителско име.",

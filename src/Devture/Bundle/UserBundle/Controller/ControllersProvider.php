@@ -15,6 +15,9 @@ class ControllersProvider implements ControllerProviderInterface {
 		$controllers->post('/logout/{token}', 'user.controller.user:logoutAction')
 			->value('locale', $app['default_locale'])->bind('user.logout');
 
+		$controllers->get('/logged-out', 'user.controller.user:loggedOutAction')
+			->value('locale', $app['default_locale'])->bind('user.logged_out');
+
 		$controllers->get('/manage', 'user.controller.user:manageAction')
 			->value('locale', $app['default_locale'])->bind('user.manage');
 

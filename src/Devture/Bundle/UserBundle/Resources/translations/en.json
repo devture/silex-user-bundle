@@ -14,6 +14,7 @@
 		"logout": "logout",
 		"log_in": "Log in",
 		"wrong_credentials": "Wrong username or password.",
+		"logged_out_successfully": "You logged out successfully.",
 		"validation": {
 			"password_empty": "The password cannot be empty.",
 			"invalid_username": "Invalid username.",
