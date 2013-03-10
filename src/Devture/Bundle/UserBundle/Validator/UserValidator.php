@@ -4,6 +4,8 @@ namespace Devture\Bundle\UserBundle\Validator;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\SharedBundle\Validator\BaseValidator;
+use Devture\Bundle\SharedBundle\Validator\EmailValidator;
+use Devture\Bundle\SharedBundle\Validator\ViolationsList;
 use Devture\Bundle\SharedBundle\Exception\NotFound;
 
 class UserValidator extends BaseValidator {
@@ -28,6 +30,8 @@ class UserValidator extends BaseValidator {
 			$violations->add('username', 'user.validation.invalid_username');
 		}
 
+		$this->validateEmail($entity, $violations);
+
 		foreach ($entity->getRoles() as $role) {
 			if (!in_array($role, $this->knownRoles)) {
 				$violations->add('roles', 'user.validation.invalid_roles');
@@ -45,6 +49,31 @@ class UserValidator extends BaseValidator {
 		}
 
 		return $violations;
+	}
+
+	private function validateEmail(User $entity, ViolationsList $violations) {
+		$email = $entity->getEmail();
+
+		if ($this->isEmpty($email)) {
+			//Empty is okay, non-required field.
+			return;
+		}
+
+		$emailValidator = new EmailValidator();
+		if (!$emailValidator->isValid($email)) {
+			$violations->add('email', 'user.validation.email.invalid');
+			return;
+		}
+
+		//Make sure it's unique, so it can potentially be used as an alternative user identifier.
+		try {
+			$user = $this->repository->findByEmail($email);
+			if ($user->getId() !== $entity->getId()) {
+				$violations->add('email', 'user.validation.email.in_use', array('%username%' => $user->getUsername()));
+			}
+		} catch (NotFound $e) {
+
+		}
 	}
 
 }

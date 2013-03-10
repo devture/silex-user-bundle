@@ -15,6 +15,14 @@ class User extends BaseModel {
 		return $this->getAttribute('username', '');
 	}
 
+	public function setEmail($value) {
+		$this->setAttribute('email', $value);
+	}
+
+	public function getEmail() {
+		return $this->getAttribute('email', null);
+	}
+
 	public function setPassword($value) {
 		$this->setAttribute('password', $value);
 	}

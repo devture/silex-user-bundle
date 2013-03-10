@@ -4,6 +4,7 @@
 		"users": "Users",
 		"add_new": "Add new",
 		"username": "Username",
+		"email": "Email",
 		"password": "Password",
 		"name": "Name",
 		"password_empty_to_preserve": "Or leave empty to preserve the old one.",
@@ -19,7 +20,11 @@
 			"password_empty": "The password cannot be empty.",
 			"invalid_username": "Invalid username.",
 			"username_in_use": "The username is in use.",
-			"invalid_roles": "Invalid roles."
+			"invalid_roles": "Invalid roles.",
+			"email": {
+				"invalid": "The email address is invalid.",
+				"in_use": "This email address is already in use by user %username%."
+			}
 		}
 	}
 }

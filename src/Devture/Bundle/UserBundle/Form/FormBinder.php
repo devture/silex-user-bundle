@@ -20,7 +20,7 @@ class FormBinder extends SetterRequestBinder {
 	}
 
 	protected function doBindRequest(User $entity, Request $request, array $options = array()) {
-		$whitelisted = array('username', 'name', 'roles');
+		$whitelisted = array('username', 'email', 'name', 'roles');
 		$this->bindWhitelisted($entity, $request->request->all(), $whitelisted);
 
 		$password = $request->request->get('password');

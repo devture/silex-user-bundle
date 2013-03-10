@@ -5,4 +5,6 @@ interface UserRepositoryInterface {
 
 	public function findByUsername($username);
 
+	public function findByEmail($email);
+
 }

@@ -15,6 +15,13 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label"><i class="icon-envelope"></i> {{ "user.email"|trans }}</label>
+				<div class="controls">
+					<input type="email" class="input-xlarge" name="email" id="email" value="{{ entity.email }}" />
+					{{ render_form_violations(form, 'email') }}
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label">{{ "user.name"|trans }}</label>
 				<div class="controls">
 					<input type="text" class="input-xlarge" name="name" id="name" value="{{ entity.name }}" />

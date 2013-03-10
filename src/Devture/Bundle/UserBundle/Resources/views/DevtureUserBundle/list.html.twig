@@ -5,6 +5,7 @@
 		<thead>
 			<tr>
 				<th>{{ "user.username"|trans }}</th>
+				<th>{{ "user.email"|trans }}</th>
 				<th>{{ "user.name"|trans }}</th>
 			</tr>
 		</thead>
@@ -15,6 +16,11 @@
 				<td>
 					<a href="{{ link }}" class="display-block">
 						<strong>{{ entity.username }}</strong>
+					</a>
+				</td>
+				<td>
+					<a href="{{ link }}" class="display-block">
+						{{ entity.email }}
 					</a>
 				</td>
 				<td>

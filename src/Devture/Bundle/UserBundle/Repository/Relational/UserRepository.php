@@ -19,9 +19,14 @@ class UserRepository extends BaseSqlRepository implements UserRepositoryInterfac
 		return $this->findOneByQuery("SELECT * FROM " . $this->getTableName() . " WHERE username = ? LIMIT 1", array($username));
 	}
 
+	public function findByEmail($email) {
+		return $this->findOneByQuery("SELECT * FROM " . $this->getTableName() . " WHERE email = ? LIMIT 1", array($email));
+	}
+
 	protected function exportModel(BaseModel $model) {
 		$data = parent::exportModel($model);
 		$data['roles'] = json_encode(isset($data['roles']) ? $data['roles'] : array(), 1);
+		$data['email'] = $model->getEmail() ? $model->getEmail() : NULL;
 		return $data;
 	}
 
