@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Validator;
+
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\SharedBundle\Validator\BaseValidator;
@@ -23,8 +24,7 @@ class UserValidator extends BaseValidator {
 		}
 
 		$username = $entity->getUsername();
-		if (strlen($username) < 3
-				|| !preg_match("/^[a-z][a-z0-9\._]+$/", $username)) {
+		if (strlen($username) < 3 || !preg_match("/^[a-z][a-z0-9\._]+$/", $username)) {
 			$violations->add('username', 'user.validation.invalid_username');
 		}
 

@@ -1,5 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Model;
+
 use Devture\Bundle\SharedBundle\Model\BaseModel;
 
 class User extends BaseModel {
