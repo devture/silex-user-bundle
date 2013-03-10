@@ -13,12 +13,12 @@
 			{% set link = path_localized('user.edit', {'id': entity.id}) %}
 			<tr>
 				<td>
-					<a href="{{ link }}" class="fbold display-block inner-table-link js-expand-to-row">
-						{{ entity.username }}
+					<a href="{{ link }}" class="display-block">
+						<strong>{{ entity.username }}</strong>
 					</a>
 				</td>
 				<td>
-					<a href="{{ link }}" class="display-block inner-table-link js-expand-to-row">
+					<a href="{{ link }}" class="display-block">
 						{{ entity.name }}
 					</a>
 				</td>

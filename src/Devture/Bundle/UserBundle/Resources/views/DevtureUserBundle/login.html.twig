@@ -1,17 +1,19 @@
 {% extends layout %}
 
 {% block content %}
-	<form name="user-login" id="user-login" class="form-horizontal" method="post" action="" style="width: 400px; margin: 0 auto; text-align: center;">
+	<form name="user-login" id="user-login" class="form-horizontal text-center" method="post" action="" style="width: 400px; margin: 0 auto;">
 		{% if error %}
-		<div class="validation-error bottom-spaced-minor">{{ error }}</div>
+			<div class="text-error bottom-spaced-minor">{{ error }}</div>
 		{% endif %}
+
 		<fieldset>
 			<div class="control-group">
 				<label class="control-label">{{ "user.username"|trans }}</label>
 				<div class="controls">
-					<input type="text" class="input-large" name="username" id="username" value="{{ username }}"/ >
+					<input type="text" class="input-large" name="username" id="username" value="{{ username }}" />
 				</div>
 			</div>
+
 			<div class="control-group last">
 				<label class="control-label">{{ "user.password"|trans }}</label>
 				<div class="controls">
@@ -29,5 +31,7 @@
 {% endblock %}
 
 {% block js %}
+	{{ parent() }}
+
 	$('#username').focus();
 {% endblock %}
