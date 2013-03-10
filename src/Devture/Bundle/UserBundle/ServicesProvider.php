@@ -87,8 +87,7 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app->before($app['user.access_control']->getEnforcer());
 
 		$app['twig.loader.filesystem']->addPath(dirname(__FILE__) . '/Resources/views/');
-		$app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app));
-		$app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\AccessControlExtension($app['user.access_control']));
+		$app['twig']->addExtension(new \Devture\Bundle\UserBundle\Twig\Extension\UserExtension($app['user.access_control'], $app));
 	}
 
 }
