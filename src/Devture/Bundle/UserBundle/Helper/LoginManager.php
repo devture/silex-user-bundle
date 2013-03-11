@@ -11,11 +11,14 @@ class LoginManager {
 
 	const COOKIE_NAME = 'user';
 
-	protected $helper;
+	const FIELD_SIGNATURE = 's';
+	const FIELD_PAYLOAD = 'p';
+	const FIELD_PAYLOAD_USERNAME = 'u';
+	const FIELD_PAYLOAD_TOKEN = 't';
 
-	protected $cookiePayloadSignKey;
-
-	protected $cookiePath;
+	private $helper;
+	private $cookiePayloadSignKey;
+	private $cookiePath;
 
 	public function __construct(AuthHelper $helper, $cookiePayloadSignKey, $cookiePath) {
 		$this->helper = $helper;
@@ -40,25 +43,28 @@ class LoginManager {
 			return null;
 		}
 
-		//See if a signature and payload can be found.
-		if (isset($data['s']) && isset($data['p']) && is_array($data['p'])) {
-			$payload = $data['p'];
-			$signature = $data['s'];
+		if (!isset($data[self::FIELD_SIGNATURE]) || !isset($data[self::FIELD_PAYLOAD]) || !is_array($data[self::FIELD_PAYLOAD])) {
+			return null;
+		}
 
-			//See if we can trust that the data hasn't been tampered with.
-			if ($this->sign($payload) === $signature) {
-				$username = $payload['u'];
-				$passwordToken = $payload['t'];
-				return $this->helper->authenticateWithToken($username, $passwordToken);
+		$payload = $data[self::FIELD_PAYLOAD];
+		$signature = $data[self::FIELD_SIGNATURE];
+
+		foreach (array(self::FIELD_PAYLOAD_USERNAME, self::FIELD_PAYLOAD_TOKEN) as $k) {
+			if (!isset($payload[$k])) {
+				return null;
 			}
 		}
 
-		return null;
-	}
+		//See if we can trust that the data hasn't been tampered with.
+		if ($this->sign($payload) !== $signature) {
+			return null;
+		}
 
-	protected function sign(array $payload) {
-		$payload = json_encode($payload);
-		return hash('sha256', $this->cookiePayloadSignKey. $payload);
+		$username = $payload[self::FIELD_PAYLOAD_USERNAME];
+		$passwordToken = $payload[self::FIELD_PAYLOAD_TOKEN];
+
+		return $this->helper->authenticateWithToken($username, $passwordToken);
 	}
 
 	public function login(User $user, Response $response = null) {
@@ -67,11 +73,11 @@ class LoginManager {
 		}
 
 		$payload = array(
-			'u' => $user->getUsername(),
-			't' => $this->helper->createPasswordToken($user),
+			self::FIELD_PAYLOAD_USERNAME => $user->getUsername(),
+			self::FIELD_PAYLOAD_TOKEN => $this->helper->createPasswordToken($user),
 		);
 
-		$data = array('p' => $payload, 's' => $this->sign($payload));
+		$data = array(self::FIELD_PAYLOAD => $payload, self::FIELD_SIGNATURE => $this->sign($payload));
 		$json = json_encode($data);
 		$base64 = base64_encode($json);
 
@@ -90,6 +96,11 @@ class LoginManager {
 		$cookie = new Cookie(self::COOKIE_NAME, '', $expireTime, $this->cookiePath);
 		$response->headers->setCookie($cookie);
 		return $response;
+	}
+
+	private function sign(array $payload) {
+		$payload = json_encode($payload);
+		return hash('sha256', $this->cookiePayloadSignKey. $payload);
 	}
 
 }
