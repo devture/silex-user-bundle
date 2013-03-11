@@ -75,7 +75,7 @@ class LoginManager {
 		$json = json_encode($data);
 		$base64 = base64_encode($json);
 
-		$expireTime = time() + 30 * 86400;
+		$expireTime = 0; //at the end of the session
 		$cookie = new Cookie(self::COOKIE_NAME, $base64, $expireTime, $this->cookiePath);
 		$response->headers->setCookie($cookie);
 		return $response;
