@@ -2,6 +2,7 @@
 namespace Devture\Bundle\UserBundle;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -83,6 +84,16 @@ class ServicesProvider implements ServiceProviderInterface {
 			return $binder;
 		};
 
+		$app['user.listener.user_from_request_initializer'] = $app->protect(function (Request $request) use ($app) {
+			$app['user'] = $app['user.login_manager']->createUserFromRequest($request);
+		});
+
+		$app['user.listener.conditional_session_extender'] = $app->protect(function (Request $request, Response $response) use ($app) {
+			if ($app['user'] !== null) {
+				$app['user.login_manager']->extendSessionIfNeeded($app['user'], $request, $response);
+			}
+		});
+
 		$this->registerControllerServices($app);
 	}
 
@@ -107,11 +118,9 @@ class ServicesProvider implements ServiceProviderInterface {
 	public function boot(Application $app) {
 		$app['localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
-		$app->before(function (Request $request) use ($app) {
-			$app['user'] = $app['user.login_manager']->createFromRequest($request);
-		});
-
+		$app->before($app['user.listener.user_from_request_initializer']);
 		$app->before($app['user.access_control']->getEnforcer());
+		$app->after($app['user.listener.conditional_session_extender']);
 
 		$app['twig.loader.filesystem']->addPath(dirname(__FILE__) . '/Resources/views/');
 		$app['twig']->addExtension(new Twig\Extension\UserExtension($app['user.access_control'], $app));

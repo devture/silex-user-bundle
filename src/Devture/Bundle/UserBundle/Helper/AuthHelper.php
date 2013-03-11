@@ -23,6 +23,11 @@ class AuthHelper {
 		$this->browserIdVerifier = $verifier;
 	}
 
+	/**
+	 * @param string $username
+	 * @param string $password
+	 * @return NULL|User
+	 */
 	public function authenticate($username, $password) {
 		try {
 			$user = $this->repository->findByUsername($username);
@@ -35,6 +40,11 @@ class AuthHelper {
 		return $user;
 	}
 
+	/**
+	 * @param string $username
+	 * @param string $passwordToken
+	 * @return NULL|User
+	 */
 	public function authenticateWithToken($username, $passwordToken) {
 		try {
 			$user = $this->repository->findByUsername($username);
@@ -47,6 +57,10 @@ class AuthHelper {
 		return $user;
 	}
 
+	/**
+	 * @param string $assertion
+	 * @return NULL|User
+	 */
 	public function authenticateWithBrowserIdAssertion($assertion) {
 		try {
 			$response = $this->browserIdVerifier->verify($assertion);
