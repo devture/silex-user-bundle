@@ -167,7 +167,7 @@ class LoginManager {
 		}
 
 		//See if we can trust that the data hasn't been tampered with.
-		if ($this->sign($payload) !== $signature) {
+		if (!StringHelper::equals($this->sign($payload), $signature)) {
 			return null;
 		}
 
