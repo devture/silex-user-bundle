@@ -30,7 +30,6 @@
 	</form>
 
 	{% if app['user.browser_id.enabled'] %}
-		<script src="https://login.persona.org/include.js"></script>
 		<style type="text/css">{% include "DevtureUserBundle/browser_id/persona-buttons.css.twig" %}</style>
 
 		<div class="text-center top-spaced-major">
@@ -56,6 +55,7 @@
 	$('#username').focus();
 
 	{% if app['user.browser_id.enabled'] %}
+	comploader.load("browserid", function () {
 		navigator.id.watch({
 			"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
 			"onlogin": function (assertion) {
@@ -90,5 +90,6 @@
 		$('#js-browser-id-login-trigger').click(function () {
 			navigator.id.request();
 		});
+	});
 	{% endif %}
 {% endblock %}
