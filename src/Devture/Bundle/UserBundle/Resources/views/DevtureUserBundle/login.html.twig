@@ -86,8 +86,10 @@
 				navigator.id.logout();
 			}
 		});
+	});
 
-		$('#js-browser-id-login-trigger').click(function () {
+	$('#js-browser-id-login-trigger').click(function () {
+		comploader.load("browserid", function () {
 			navigator.id.request();
 		});
 	});
