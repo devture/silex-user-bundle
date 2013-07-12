@@ -18,7 +18,7 @@ class UserValidator extends BaseValidator {
 		$this->knownRoles = array_keys($knownRoles);
 	}
 
-	public function validate(User $entity, array $options = array()) {
+	public function validate($entity, array $options = array()) {
 		$violations = parent::validate($entity, $options);
 
 		if ($entity->getPassword() === '' || $entity->getPassword() === null) {
