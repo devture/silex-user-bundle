@@ -1,22 +1,22 @@
 {% extends layout %}
 
 {% block content %}
-	<form name="user-login" id="user-login" class="form-horizontal text-center" method="post" action="" style="width: 400px; margin: 0 auto;">
+	<form name="user-login" id="user-login" class="text-center" method="post" action="" style="width: 400px; margin: 0 auto;" role="form">
 		{% if error %}
-			<div class="text-error bottom-spaced-minor">{{ error }}</div>
+			<div class="text-danger bottom-spaced-minor">{{ error }}</div>
 		{% endif %}
 
 		<fieldset>
 			<div class="form-group">
-				<label class="col-lg-2 control-label">{{ "user.username"|trans }}</label>
-				<div class="controls">
+				<label class="col-lg-4 control-label">{{ "user.username"|trans }}</label>
+				<div class="col-lg-offset-4">
 					<input type="text" class="form-control" name="username" id="username" value="{{ username }}" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-lg-2 control-label">{{ "user.password"|trans }}</label>
-				<div class="controls">
+				<label class="col-lg-4 control-label">{{ "user.password"|trans }}</label>
+				<div class="col-lg-offset-4">
 					<input type="password" class="form-control" name="password" id="password" />
 				</div>
 			</div>
