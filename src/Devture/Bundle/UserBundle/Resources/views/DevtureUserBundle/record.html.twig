@@ -95,8 +95,8 @@
 	});
 	{% endif %}
 
-	$('#role_all').bind('change', function () {
-		if ($(this).attr('checked')) {
+	$('#role_all').change(function () {
+		if ($(this).is(':checked')) {
 			$('.js-cbx-role input[type=checkbox]').attr('checked', false).attr('disabled', true);
 		} else {
 			$('.js-cbx-role input[type=checkbox]').attr('disabled', false);
