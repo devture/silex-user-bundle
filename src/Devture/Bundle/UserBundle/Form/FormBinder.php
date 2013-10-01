@@ -25,7 +25,11 @@ class FormBinder extends SetterRequestBinder {
 
 		$password = $request->request->get('password');
 		if ($password !== '') {
-			$entity->setPassword($this->encoder->encodePassword($password));
+			if (strlen($password) > 4096) {
+				$this->violations->add('password', 'user.validation.password_too_long');
+			} else {
+				$entity->setPassword($this->encoder->encodePassword($password));
+			}
 		}
 
 		$this->violations->merge($this->validator->validate($entity, $options));

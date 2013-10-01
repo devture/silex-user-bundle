@@ -81,6 +81,11 @@ class AuthHelper {
 	}
 
 	private function isPasswordMatching(User $user, $password) {
+		if (strlen($password) > 4096) {
+			//Do not pass very long passwords to the encoder. Computing a hash might be slow.
+			//Just reject them outright.
+			return false;
+		}
 		return $this->encoder->isPasswordValid($user->getPassword(), $password);
 	}
 
