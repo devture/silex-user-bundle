@@ -38,6 +38,8 @@
 					{{ render_form_violations(form, 'password') }}
 				</div>
 			</div>
+
+			{% if roles|length != 0 %}
 			<div class="form-group row">
 				<label class="col-lg-2 control-label">{{ "devture_user.roles"|trans }}</label>
 				<div class="col-lg-6">
@@ -54,6 +56,7 @@
 					{{ render_form_violations(form, 'roles') }}
 				</div>
 			</div>
+			{% endif %}
 
 			<div class="col-lg-offset-2 col-xs-offset-0">
 				<button type="submit" class="btn btn-primary">
