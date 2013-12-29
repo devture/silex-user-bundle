@@ -1,29 +1,17 @@
 {% extends layout %}
 
 {% block content %}
-	<form name="devture_user_login" id="devture_user_login" class="text-center" method="post" action="" style="width: 400px; margin: 0 auto;" role="form">
+	<style type="text/css">{% include "DevtureUserBundle/login.css" %}</style>
+
+	<form name="devture_user_login" id="devture_user_login" class="form-signin" method="post" action="" role="form">
 		{% if error %}
 			<div class="text-danger bottom-spaced-minor">{{ error }}</div>
 		{% endif %}
 
 		<fieldset>
-			<div class="form-group">
-				<label class="col-lg-4 control-label">{{ "devture_user.username"|trans }}</label>
-				<div class="col-lg-offset-4">
-					<input type="text" class="form-control" name="username" id="username" value="{{ username }}" />
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="col-lg-4 control-label">{{ "devture_user.password"|trans }}</label>
-				<div class="col-lg-offset-4">
-					<input type="password" class="form-control" name="password" id="password" />
-				</div>
-			</div>
-
-			<div class="top-spaced-minor"></div>
-
-			<button type="submit" class="btn btn-primary">
+			<input type="text" class="form-control" placeholder="{{ "devture_user.username"|trans }}" name="username" required="required" autofocus>
+			<input type="password" class="form-control" placeholder="{{ "devture_user.password"|trans }}" name="password" required="required">
+			<button type="submit" class="btn btn-lg btn-primary btn-block">
 				{{ "devture_user.log_in"|trans }}
 			</button>
 		</fieldset>

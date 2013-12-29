@@ -5,7 +5,7 @@
 		<thead>
 			<tr>
 				<th>{{ "devture_user.username"|trans }}</th>
-				<th>{{ "devture_user.email"|trans }}</th>
+				<th class="hidden-xs">{{ "devture_user.email"|trans }}</th>
 				<th>{{ "devture_user.name"|trans }}</th>
 			</tr>
 		</thead>
@@ -18,7 +18,7 @@
 						<strong>{{ entity.username }}</strong>
 					</a>
 				</td>
-				<td>
+				<td class="hidden-xs">
 					<a href="{{ link }}" class="display-block">
 						{{ entity.email }}
 					</a>
