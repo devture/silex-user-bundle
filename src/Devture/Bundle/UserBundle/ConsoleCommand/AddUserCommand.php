@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Devture\Component\DBAL\Exception\NotFound;
+use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 
 class AddUserCommand extends Command {
@@ -21,7 +22,7 @@ class AddUserCommand extends Command {
 	protected function configure() {
 		$this->addArgument('username', InputArgument::REQUIRED, 'The username of the new account.');
 		$this->addArgument('email', InputArgument::OPTIONAL, 'The email address of the new account.');
-		$this->setDescription('Adds a new user account.');
+		$this->setDescription('Adds a new user account (with full privileges).');
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
@@ -56,10 +57,12 @@ class AddUserCommand extends Command {
 			false
 		);
 
+		/* @var $entity User */
 		$entity = $repository->createModel(array());
 		$entity->setUsername($username);
 		$entity->setEmail($email ?: null);
 		$entity->setPassword($this->getPasswordEncoder()->encodePassword($password));
+		$entity->setRoles(array(User::ROLE_MASTER));
 
 		$repository->add($entity);
 
