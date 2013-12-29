@@ -1,7 +1,7 @@
 {% extends layout %}
 
 {% block content %}
-	<style type="text/css">{% include "DevtureUserBundle/login.css" %}</style>
+	<style type="text/css">{% include "DevtureUserBundle/css/login.css" %}</style>
 
 	<form name="devture_user_login" id="devture_user_login" class="form-signin" method="post" action="" role="form">
 		{% if error %}
@@ -21,7 +21,7 @@
 	{% if app['devture_user.browser_id.enabled'] %}
 		<br />
 
-		<style type="text/css">{% include "DevtureUserBundle/browser_id/persona-buttons.css.twig" %}</style>
+		<style type="text/css">{% include "DevtureUserBundle/css/persona-buttons.css" %}</style>
 
 		<div class="text-center">
 			<hr style="width: 60%; margin: 0 auto;" />
