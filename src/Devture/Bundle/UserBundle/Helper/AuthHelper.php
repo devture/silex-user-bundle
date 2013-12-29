@@ -14,7 +14,7 @@ class AuthHelper {
 	private $passwordTokenSalt;
 	private $browserIdVerifier;
 
-	public function __construct(UserRepositoryInterface $repository, BlowfishPasswordEncoder $encoder, $passwordTokenSalt) {
+	public function __construct(UserRepositoryInterface $repository, PasswordEncoder $encoder, $passwordTokenSalt) {
 		$this->repository = $repository;
 		$this->encoder = $encoder;
 		$this->passwordTokenSalt = $passwordTokenSalt;
@@ -87,7 +87,7 @@ class AuthHelper {
 			//Just reject them outright.
 			return false;
 		}
-		return $this->encoder->isPasswordValid($user->getPassword(), $password);
+		return $this->encoder->isPasswordValid($password, $user->getPassword());
 	}
 
 }

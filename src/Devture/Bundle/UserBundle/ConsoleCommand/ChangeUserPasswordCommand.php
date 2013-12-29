@@ -57,7 +57,7 @@ class ChangeUserPasswordCommand extends Command {
 	}
 
 	/**
-	 * @return \Devture\Bundle\UserBundle\Helper\BlowfishPasswordEncoder
+	 * @return \Devture\Bundle\UserBundle\Helper\PasswordEncoder
 	 */
 	private function getPasswordEncoder() {
 		return $this->container['devture_user.password_encoder'];

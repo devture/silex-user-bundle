@@ -5,13 +5,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Devture\Component\Form\Binder\SetterRequestBinder;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Validator\UserValidator;
-use Devture\Bundle\UserBundle\Helper\BlowfishPasswordEncoder;
+use Devture\Bundle\UserBundle\Helper\PasswordEncoder;
 
 class FormBinder extends SetterRequestBinder {
 
 	private $encoder;
 
-	public function __construct(UserValidator $validator, BlowfishPasswordEncoder $encoder) {
+	public function __construct(UserValidator $validator, PasswordEncoder $encoder) {
 		parent::__construct($validator);
 		$this->encoder = $encoder;
 	}

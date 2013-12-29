@@ -69,7 +69,7 @@ class ServicesProvider implements ServiceProviderInterface {
 		}
 
 		$app['devture_user.password_encoder'] = $app->share(function ($app) use ($config) {
-			return new Helper\BlowfishPasswordEncoder($config['blowfish_cost']);
+			return new Helper\PasswordEncoder($config['blowfish_cost']);
 		});
 
 		$app['devture_user.auth_helper'] = $app->share(function ($app) use ($config) {
