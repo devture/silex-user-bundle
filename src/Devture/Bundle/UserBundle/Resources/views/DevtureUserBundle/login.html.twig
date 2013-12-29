@@ -21,6 +21,7 @@
 	{% if app['devture_user.browser_id.enabled'] %}
 		<br />
 
+		<script src="https://login.persona.org/include.js"></script>
 		<style type="text/css">{% include "DevtureUserBundle/css/persona-buttons.css" %}</style>
 
 		<div class="text-center">
@@ -47,46 +48,40 @@
 {% block js %}
 	{{ parent() }}
 
-	$('#username').focus();
-
 	{% if app['devture_user.browser_id.enabled'] %}
-	comploader.load("browserid", function () {
-		navigator.id.watch({
-			"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
-			"onlogin": function (assertion) {
-				$('#js-browser-id-working').show();
+	navigator.id.watch({
+		"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
+		"onlogin": function (assertion) {
+			$('#js-browser-id-working').show();
 
-				$.ajax({
-					"type": "POST",
-					"dataType": "json",
-					"url": {{ path('devture_user.browser_id.login')|json_encode|raw }},
-					"data": {"assertion": assertion},
-					"success": function (response, status, xhr) {
-						if (response.ok) {
-							window.location.reload();
-						} else {
-							$('#js-browser-id-working').hide();
-							alert({{ "devture_user.browser_id.unknown_email_or_other_login_failure"|trans|json_encode|raw }});
-							navigator.id.logout();
-						}
+			$.ajax({
+				"type": "POST",
+				"dataType": "json",
+				"url": {{ path('devture_user.browser_id.login')|json_encode|raw }},
+				"data": {"assertion": assertion},
+				"success": function (response, status, xhr) {
+					if (response.ok) {
 						window.location.reload();
-					},
-					"error": function (xhr, status, err) {
+					} else {
 						$('#js-browser-id-working').hide();
+						alert({{ "devture_user.browser_id.unknown_email_or_other_login_failure"|trans|json_encode|raw }});
 						navigator.id.logout();
 					}
-				});
-			},
-			"onlogout": function () {
-				navigator.id.logout();
-			}
-		});
+					window.location.reload();
+				},
+				"error": function (xhr, status, err) {
+					$('#js-browser-id-working').hide();
+					navigator.id.logout();
+				}
+			});
+		},
+		"onlogout": function () {
+			navigator.id.logout();
+		}
 	});
 
 	$('#js-browser-id-login-trigger').click(function () {
-		comploader.load("browserid", function () {
-			navigator.id.request();
-		});
+		navigator.id.request();
 	});
 	{% endif %}
 {% endblock %}
