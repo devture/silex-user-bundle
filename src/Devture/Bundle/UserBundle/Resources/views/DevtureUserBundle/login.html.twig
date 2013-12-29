@@ -21,7 +21,10 @@
 	{% if app['devture_user.browser_id.enabled'] %}
 		<br />
 
-		<script src="https://login.persona.org/include.js"></script>
+		{% if app['devture_user.browser_id.polyfill'] %}
+			<script src="{{ app['devture_user.browser_id.polyfill']|raw }}"></script>
+		{% endif %}
+
 		<style type="text/css">{% include "DevtureUserBundle/css/persona-buttons.css" %}</style>
 
 		<div class="text-center">

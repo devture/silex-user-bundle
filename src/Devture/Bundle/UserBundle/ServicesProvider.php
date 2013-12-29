@@ -15,6 +15,7 @@ class ServicesProvider implements ServiceProviderInterface {
 			'database_type' => 'mongodb', //relational, mongodb
 			'browser_id.enabled' => false,
 			'browser_id.audience' => null,
+			'browser_id.polyfill' => 'https://login.persona.org/include.js',
 			'cookie_path' => '/',
 			'blowfish_cost' => 13,
 			'roles' => array(), //role key => description
@@ -43,6 +44,7 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app['devture_user.browser_id.enabled'] = $config['browser_id.enabled'];
 		$app['devture_user.browser_id.audience'] = $config['browser_id.audience'];
+		$app['devture_user.browser_id.polyfill'] = $config['browser_id.polyfill'];
 
 		if ($app['devture_user.browser_id.enabled']) {
 			$app['devture_user.browser_id.verifier'] = function ($app) {
