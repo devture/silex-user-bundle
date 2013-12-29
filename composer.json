@@ -17,6 +17,9 @@
 		"devture/silex-localization-bundle": "2.0.*",
 		"browserid/browserid": "1.0.*"
 	},
+	"suggest": {
+		"symfony/console": "To use the console commands"
+	},
 	"autoload": {
 		"psr-0": {
 			"Devture\\Bundle\\UserBundle\\": "src/"

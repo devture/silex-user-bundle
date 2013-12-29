@@ -100,7 +100,18 @@ class ServicesProvider implements ServiceProviderInterface {
 			}
 		});
 
+		$this->registerConsoleServices($app);
+
 		$this->registerControllerServices($app);
+	}
+
+	private function registerConsoleServices(Application $app) {
+		$app['devture_user.console.command.add_user'] = function ($app) {
+			return new ConsoleCommand\AddUserCommand($app);
+		};
+		$app['devture_user.console.command.change_user_password'] = function ($app) {
+			return new ConsoleCommand\ChangeUserPasswordCommand($app);
+		};
 	}
 
 	private function registerControllerServices(Application $app) {
@@ -131,6 +142,11 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app['twig.loader.filesystem']->addPath(dirname(__FILE__) . '/Resources/views/');
 		$app['twig']->addExtension(new Twig\Extension\UserExtension($app['devture_user.access_control'], $app));
+
+		if (isset($app['console'])) {
+			$app['console']->add($app['devture_user.console.command.add_user']);
+			$app['console']->add($app['devture_user.console.command.change_user_password']);
+		}
 	}
 
 }

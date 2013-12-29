@@ -1,7 +1,9 @@
 <?php
 namespace Devture\Bundle\UserBundle\Repository;
 
-interface UserRepositoryInterface {
+use Devture\Component\DBAL\Repository\RepositoryInterface;
+
+interface UserRepositoryInterface extends RepositoryInterface {
 
 	public function findByUsername($username);
 
