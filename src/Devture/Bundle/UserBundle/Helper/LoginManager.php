@@ -37,16 +37,14 @@ class LoginManager {
 	 * @return NULL|User
 	 */
 	public function createUserFromRequest(Request $request) {
-		$cookieData = $this->getCookieData($request);
+		$payload = $this->getCookieData($request);
 
-		if ($cookieData === null) {
+		if ($payload === null) {
 			//No cookie or an invalid one.
 			return null;
 		}
 
-		list($payload, $creationTime) = $cookieData;
-
-		if ($creationTime < time() - self::COOKIE_VALIDITY_TIME) {
+		if ($payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_VALIDITY_TIME) {
 			//The cookie is too old for us to trust it.
 			//The browser session obviously stayed active for a long time and it hasn't expired.
 			return null;
@@ -54,9 +52,9 @@ class LoginManager {
 
 		$user = $this->helper->authenticateWithToken($payload[self::FIELD_PAYLOAD_USERNAME], $payload[self::FIELD_PAYLOAD_TOKEN]);
 
-		if ($user !== null && $creationTime < time() - self::COOKIE_EXTEND_AFTER_TIME) {
-			//The current session cookie is valid and can be tied to a user,
-			//but has been generated some time (but not too long) ago. Let's mark it for extension.
+		if ($user !== null && $payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_EXTEND_AFTER_TIME) {
+			//The current cookie is still valid and can be tied to a user,
+			//but is due for extension. Let's mark it as such.
 			$request->attributes->set(self::REQUEST_ATTRIBUTE_EXTEND_SESSION, (string) $user->getId());
 		}
 
@@ -76,12 +74,12 @@ class LoginManager {
 		$payload = array(
 			self::FIELD_PAYLOAD_USERNAME => $user->getUsername(),
 			self::FIELD_PAYLOAD_TOKEN => $this->helper->createPasswordToken($user),
+			self::FIELD_CREATION_TIME => time(),
 		);
 
 		$data = array(
 			self::FIELD_PAYLOAD => $payload,
 			self::FIELD_SIGNATURE => $this->sign($payload),
-			self::FIELD_CREATION_TIME => time(),
 		);
 		$base64 = base64_encode(json_encode($data));
 
@@ -148,20 +146,14 @@ class LoginManager {
 			return null;
 		}
 
-		foreach (array(self::FIELD_SIGNATURE, self::FIELD_PAYLOAD, self::FIELD_CREATION_TIME) as $k) {
-			if (!isset($data[$k])) {
-				return null;
-			}
-		}
-		if (!is_array($data[self::FIELD_PAYLOAD])) {
+		if (!isset($data[self::FIELD_SIGNATURE]) || !isset($data[self::FIELD_PAYLOAD]) || !is_array($data[self::FIELD_PAYLOAD])) {
 			return null;
 		}
 
 		$payload = $data[self::FIELD_PAYLOAD];
 		$signature = $data[self::FIELD_SIGNATURE];
-		$creationTime = $data[self::FIELD_CREATION_TIME];
 
-		foreach (array(self::FIELD_PAYLOAD_USERNAME, self::FIELD_PAYLOAD_TOKEN) as $k) {
+		foreach (array(self::FIELD_PAYLOAD_USERNAME, self::FIELD_PAYLOAD_TOKEN, self::FIELD_CREATION_TIME) as $k) {
 			if (!isset($payload[$k])) {
 				return null;
 			}
@@ -172,7 +164,7 @@ class LoginManager {
 			return null;
 		}
 
-		return array($payload, $creationTime);
+		return $payload;
 	}
 
 }
