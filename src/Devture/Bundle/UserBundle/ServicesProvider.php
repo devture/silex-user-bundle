@@ -16,8 +16,18 @@ class ServicesProvider implements ServiceProviderInterface {
 			'browser_id' => array(
 				'enabled' => false,
 				'audience' => null,
-			)
+			),
+			'cookie_path' => '/',
+			'blowfish_cost' => 13,
+			'roles' => array(), //role key => description
 		), $config);
+
+		$requiredConfigKeys = array('database_service_id', 'password_token_salt', 'cookie_signing_secret');
+		foreach ($requiredConfigKeys as $k) {
+			if (!array_key_exists($k, $config)) {
+				throw new \InvalidArgumentException(sprintf('The %s parameter passed to %s is missing.', $k, __CLASS__));
+			}
+		}
 
 		$this->config = $config;
 	}
