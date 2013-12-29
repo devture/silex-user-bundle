@@ -11,8 +11,8 @@ use Devture\Bundle\UserBundle\Helper\AuthHelper;
 class LoginManager {
 
 	const COOKIE_NAME = 'devture_user';
-	const COOKIE_VALIDITY_TIME = 43200; //12 hours
-	const COOKIE_EXTEND_AFTER_TIME = 1800; //30 minutes
+	const COOKIE_VALIDITY_PERIOD = 43200; //12 hours
+	const COOKIE_EXTEND_AFTER_PERIOD = 1800; //30 minutes
 
 	const FIELD_SIGNATURE = 's';
 	const FIELD_PAYLOAD = 'p';
@@ -44,7 +44,7 @@ class LoginManager {
 			return null;
 		}
 
-		if ($payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_VALIDITY_TIME) {
+		if ($payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_VALIDITY_PERIOD) {
 			//The cookie is too old for us to trust it.
 			//The browser session obviously stayed active for a long time and it hasn't expired.
 			return null;
@@ -52,7 +52,7 @@ class LoginManager {
 
 		$user = $this->helper->authenticateWithToken($payload[self::FIELD_PAYLOAD_USERNAME], $payload[self::FIELD_PAYLOAD_TOKEN]);
 
-		if ($user !== null && $payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_EXTEND_AFTER_TIME) {
+		if ($user !== null && $payload[self::FIELD_CREATION_TIME] < time() - self::COOKIE_EXTEND_AFTER_PERIOD) {
 			//The current cookie is still valid and can be tied to a user,
 			//but is due for extension. Let's mark it as such.
 			$request->attributes->set(self::REQUEST_ATTRIBUTE_EXTEND_SESSION, (string) $user->getId());
