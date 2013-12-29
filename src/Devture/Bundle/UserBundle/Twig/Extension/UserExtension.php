@@ -2,6 +2,7 @@
 namespace Devture\Bundle\UserBundle\Twig\Extension;
 
 use Devture\Bundle\UserBundle\AccessControl\AccessControl;
+use Devture\Bundle\UserBundle\Model\User;
 
 class UserExtension extends \Twig_Extension {
 
@@ -14,7 +15,7 @@ class UserExtension extends \Twig_Extension {
 	}
 
 	public function getName() {
-		return 'user';
+		return 'devture_user_user_extension';
 	}
 
 	public function getFunctions() {
@@ -25,14 +26,24 @@ class UserExtension extends \Twig_Extension {
 		);
 	}
 
+	/**
+	 * @return User|NULL
+	 */
 	public function getUser() {
 		return $this->container['user'];
 	}
 
+	/**
+	 * @return boolean
+	 */
 	public function isLoggedIn() {
-		return $this->container['user'] !== null;
+		return ($this->container['user'] !== null);
 	}
 
+	/**
+	 * @param string $role
+	 * @return boolean
+	 */
 	public function isGranted($role) {
 		return $this->control->isGranted($role);
 	}

@@ -5,7 +5,7 @@ use Devture\Bundle\UserBundle\Helper\AuthHelper;
 use Devture\Bundle\UserBundle\Helper\LoginManager;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 
-class BaseController extends \Devture\Bundle\SharedBundle\Controller\BaseController {
+class BaseController extends \Devture\Bundle\FrameworkBundle\Controller\BaseController {
 
 	/**
 	 * @return AuthHelper
@@ -29,7 +29,7 @@ class BaseController extends \Devture\Bundle\SharedBundle\Controller\BaseControl
 	}
 
 	protected function getHomepageUrl() {
-		return $this->get('url_generator_localized')->generate('homepage');
+		return $this->generateUrl('homepage');
 	}
 
 }

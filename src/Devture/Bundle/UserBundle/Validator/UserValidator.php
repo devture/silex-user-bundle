@@ -1,12 +1,12 @@
 <?php
 namespace Devture\Bundle\UserBundle\Validator;
 
+use Devture\Component\Form\Validator\BaseValidator;
+use Devture\Component\Form\Validator\EmailValidator;
+use Devture\Component\Form\Validator\ViolationsList;
+use Devture\Component\DBAL\Exception\NotFound;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
-use Devture\Bundle\SharedBundle\Validator\BaseValidator;
-use Devture\Bundle\SharedBundle\Validator\EmailValidator;
-use Devture\Bundle\SharedBundle\Validator\ViolationsList;
-use Devture\Bundle\SharedBundle\Exception\NotFound;
 
 class UserValidator extends BaseValidator {
 
@@ -22,19 +22,19 @@ class UserValidator extends BaseValidator {
 		$violations = parent::validate($entity, $options);
 
 		if ($entity->getPassword() === '' || $entity->getPassword() === null) {
-			$violations->add('password', 'user.validation.password_empty');
+			$violations->add('password', 'devture_user.validation.password_empty');
 		}
 
 		$username = $entity->getUsername();
 		if (strlen($username) < 3 || !preg_match("/^[a-z][a-z0-9\._]+$/", $username)) {
-			$violations->add('username', 'user.validation.invalid_username');
+			$violations->add('username', 'devture_user.validation.invalid_username');
 		}
 
 		$this->validateEmail($entity, $violations);
 
 		foreach ($entity->getRoles() as $role) {
 			if (!in_array($role, $this->knownRoles)) {
-				$violations->add('roles', 'user.validation.invalid_roles');
+				$violations->add('roles', 'devture_user.validation.invalid_roles');
 				break;
 			}
 		}
@@ -42,7 +42,7 @@ class UserValidator extends BaseValidator {
 		try {
 			$user = $this->repository->findByUsername($username);
 			if ($user->getId() !== $entity->getId()) {
-				$violations->add('username', 'user.validation.username_in_use');
+				$violations->add('username', 'devture_user.validation.username_in_use');
 			}
 		} catch (NotFound $e) {
 
@@ -59,9 +59,8 @@ class UserValidator extends BaseValidator {
 			return;
 		}
 
-		$emailValidator = new EmailValidator();
-		if (!$emailValidator->isValid($email)) {
-			$violations->add('email', 'user.validation.email.invalid');
+		if (!EmailValidator::isValid($email)) {
+			$violations->add('email', 'devture_user.validation.email.invalid');
 			return;
 		}
 
@@ -69,7 +68,7 @@ class UserValidator extends BaseValidator {
 		try {
 			$user = $this->repository->findByEmail($email);
 			if ($user->getId() !== $entity->getId()) {
-				$violations->add('email', 'user.validation.email.in_use', array('%username%' => $user->getUsername()));
+				$violations->add('email', 'devture_user.validation.email.in_use', array('%username%' => $user->getUsername()));
 			}
 		} catch (NotFound $e) {
 

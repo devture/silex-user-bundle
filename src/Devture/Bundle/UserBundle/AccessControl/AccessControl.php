@@ -2,7 +2,6 @@
 namespace Devture\Bundle\UserBundle\AccessControl;
 
 use Devture\Bundle\UserBundle\Model\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class AccessControl {
@@ -16,7 +15,7 @@ class AccessControl {
 
 	public function isGranted($role) {
 		$user = $this->app['user'];
-		if (! ($user instanceof User)) {
+		if (!($user instanceof User)) {
 			return false;
 		}
 		return $user->hasRole($role) || $user->hasRole(User::ROLE_MASTER);
@@ -24,12 +23,6 @@ class AccessControl {
 
 	public function isLoggedIn() {
 		return ($this->app['user'] instanceof User);
-	}
-
-	public function redirectToLogin() {
-		$next = $this->app['request']->getRequestUri();
-		$url = $this->app['url_generator_localized']->generate('user.login', array('next' => $next));
-		return new RedirectResponse($url);
 	}
 
 	public function getEnforcer() {
@@ -42,8 +35,8 @@ class AccessControl {
 	 * when working with a Request that should be protected in a way.
 	 *
 	 * When doing protection, a response could be of 2 types:
-	 *  1. "401 Not Authorized"
-	 *  2. Redirect to login page
+	 * 1. "401 Not Authorized" - when authenticated, but not authorized
+	 * 2. Redirect to login page - when not authenticated
 	 **/
 	public function enforceProtection(Request $request) {
 		foreach ($this->routeProtectors as $protector) {
@@ -66,6 +59,12 @@ class AccessControl {
 
 	public function addRouteProtector(RouteProtectorInterface $protector) {
 		$this->routeProtectors[] = $protector;
+	}
+
+	private function redirectToLogin() {
+		$next = $this->app['request']->getRequestUri();
+		$url = $this->app['url_generator']->generate('devture_user.login', array('next' => $next));
+		return $this->app->redirect($url);
 	}
 
 }

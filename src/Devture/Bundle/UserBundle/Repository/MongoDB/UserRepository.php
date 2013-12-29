@@ -1,9 +1,10 @@
 <?php
 namespace Devture\Bundle\UserBundle\Repository\MongoDB;
 
-use Devture\Bundle\SharedBundle\Model\BaseModel;
-use Devture\Bundle\SharedBundle\Repository\BaseMongoRepository;
+use Devture\Component\DBAL\Model\BaseModel;
+use Devture\Component\DBAL\Repository\BaseMongoRepository;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
+use Devture\Bundle\UserBundle\Mode\User;
 
 class UserRepository extends BaseMongoRepository implements UserRepositoryInterface {
 
@@ -15,9 +16,13 @@ class UserRepository extends BaseMongoRepository implements UserRepositoryInterf
 		return 'user';
 	}
 
-	protected function exportModel(BaseModel $model) {
+	/**
+	 * @param User $model
+	 * @return array
+	 */
+	protected function exportModel($model) {
 		$data = parent::exportModel($model);
-		$data['email'] = $model->getEmail() ? $model->getEmail() : NULL;
+		$data['email'] = ($model->getEmail() ? $model->getEmail() : null);
 		return $data;
 	}
 

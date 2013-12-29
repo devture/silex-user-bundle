@@ -1,6 +1,8 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
 
+use Devture\Component\Form\Helper\StringHelper;
+
 class BlowfishPasswordEncoder {
 
 	private $cost;

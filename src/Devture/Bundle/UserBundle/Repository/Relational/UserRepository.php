@@ -1,9 +1,10 @@
 <?php
 namespace Devture\Bundle\UserBundle\Repository\Relational;
 
-use Devture\Bundle\SharedBundle\Model\BaseModel;
-use Devture\Bundle\SharedBundle\Repository\BaseSqlRepository;
+use Devture\Component\DBAL\Model\BaseModel;
+use Devture\Component\DBAL\Repository\BaseSqlRepository;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
+use Devture\Bundle\UserBundle\Mode\User;
 
 class UserRepository extends BaseSqlRepository implements UserRepositoryInterface {
 
@@ -23,16 +24,20 @@ class UserRepository extends BaseSqlRepository implements UserRepositoryInterfac
 		return $this->findOneByQuery("SELECT * FROM " . $this->getTableName() . " WHERE email = ? LIMIT 1", array($email));
 	}
 
-	protected function exportModel(BaseModel $model) {
+	/**
+	 * @param User $model
+	 * @return array
+	 */
+	protected function exportModel($model) {
 		$data = parent::exportModel($model);
-		$data['roles'] = json_encode(isset($data['roles']) ? $data['roles'] : array(), 1);
-		$data['email'] = $model->getEmail() ? $model->getEmail() : NULL;
+		$data['roles'] = json_encode(isset($data['roles']) ? $data['roles'] : array());
+		$data['email'] = ($model->getEmail() ? $model->getEmail() : null);
 		return $data;
 	}
 
-	public function createModel(array $data) {
+	protected function hydrateModel(array $data) {
 		$data['roles'] = isset($data['roles']) ? json_decode($data['roles'], 1) : array();
-		return parent::createModel($data);
+		return parent::hydrateModel($data);
 	}
 
 }

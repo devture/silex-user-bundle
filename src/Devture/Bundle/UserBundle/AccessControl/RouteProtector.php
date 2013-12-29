@@ -19,7 +19,7 @@ class RouteProtector implements RouteProtectorInterface {
 		if ($request->attributes->get('_route') !== $this->routeName) {
 			return false;
 		}
-		return !$this->app['user.access_control']->isGranted($this->requiredRole);
+		return !$this->app['devture_user.access_control']->isGranted($this->requiredRole);
 	}
 
 }

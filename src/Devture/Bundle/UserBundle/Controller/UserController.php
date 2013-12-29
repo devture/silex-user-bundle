@@ -2,7 +2,7 @@
 namespace Devture\Bundle\UserBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Devture\Bundle\SharedBundle\Exception\NotFound;
+use Devture\Component\DBAL\Exception\NotFound;
 
 class UserController extends BaseController {
 
@@ -23,7 +23,7 @@ class UserController extends BaseController {
 				$response = $this->redirect($next);
 				return $this->getLoginManager()->login($user, $response);
 			} else {
-				$error = $this->get('translator')->trans('user.wrong_credentials');
+				$error = $this->get('translator')->trans('devture_user.wrong_credentials');
 			}
 		}
 
@@ -35,9 +35,9 @@ class UserController extends BaseController {
 
 	public function logoutAction($token) {
 		$response = $this->redirect($this->getHomepageUrl());
-		if ($this->get('shared.csrf_token_generator')->isValid('logout', $token)) {
+		if ($this->get('devture_framework.csrf_token_manager')->isValid('logout', $token)) {
 			if ($this->get('user') !== null) {
-				$response = $this->redirect($this->generateUrlNsLocalized('logged_out'));
+				$response = $this->redirect($this->generateUrlNs('logged_out'));
 				$this->getLoginManager()->logout($response);
 			}
 		}
@@ -62,9 +62,9 @@ class UserController extends BaseController {
 
 		$binder = $this->getNs('form_binder');
 
-		if ($request->getMethod() === 'POST' && $binder->bindProtectedRequest($entity, $request)) {
+		if ($request->getMethod() === 'POST' && $binder->bind($entity, $request)) {
 			$this->getRepository()->add($entity);
-			return $this->redirect($this->generateUrlNsLocalized('manage'));
+			return $this->redirect($this->generateUrlNs('manage'));
 		}
 
 		return $this->renderView('DevtureUserBundle/record.html.twig', array(
@@ -84,9 +84,9 @@ class UserController extends BaseController {
 
 		$binder = $this->getNs('form_binder');
 
-		if ($request->getMethod() === 'POST' && $binder->bindProtectedRequest($entity, $request)) {
+		if ($request->getMethod() === 'POST' && $binder->bind($entity, $request)) {
 			$this->getRepository()->update($entity);
-			return $this->redirect($this->generateUrlNsLocalized('manage'));
+			return $this->redirect($this->generateUrlNs('manage'));
 		}
 
 		return $this->renderView('DevtureUserBundle/record.html.twig', array(
@@ -99,7 +99,7 @@ class UserController extends BaseController {
 
 	public function deleteAction($id, $token) {
 		$intention = 'delete-user-' . $id;
-		if ($this->get('shared.csrf_token_generator')->isValid($intention, $token)) {
+		if ($this->get('devture_framework.csrf_token_manager')->isValid($intention, $token)) {
 			try {
 				$this->getRepository()->delete($this->getRepository()->find($id));
 			} catch (NotFound $e) {

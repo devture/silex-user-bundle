@@ -26,7 +26,7 @@ class RoutePrefixProtector implements RouteProtectorInterface {
 		if (in_array($routeName, $this->whitelistedRoutes)) {
 			return false;
 		}
-		return !$this->app['user.access_control']->isGranted($this->requiredRole);
+		return !$this->app['devture_user.access_control']->isGranted($this->requiredRole);
 	}
 
 }

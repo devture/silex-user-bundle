@@ -1,21 +1,21 @@
 {% extends layout %}
 
 {% block content %}
-	<form name="user-login" id="user-login" class="text-center" method="post" action="" style="width: 400px; margin: 0 auto;" role="form">
+	<form name="devture_user_login" id="devture_user_login" class="text-center" method="post" action="" style="width: 400px; margin: 0 auto;" role="form">
 		{% if error %}
 			<div class="text-danger bottom-spaced-minor">{{ error }}</div>
 		{% endif %}
 
 		<fieldset>
 			<div class="form-group">
-				<label class="col-lg-4 control-label">{{ "user.username"|trans }}</label>
+				<label class="col-lg-4 control-label">{{ "devture_user.username"|trans }}</label>
 				<div class="col-lg-offset-4">
 					<input type="text" class="form-control" name="username" id="username" value="{{ username }}" />
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="col-lg-4 control-label">{{ "user.password"|trans }}</label>
+				<label class="col-lg-4 control-label">{{ "devture_user.password"|trans }}</label>
 				<div class="col-lg-offset-4">
 					<input type="password" class="form-control" name="password" id="password" />
 				</div>
@@ -24,26 +24,32 @@
 			<div class="top-spaced-minor"></div>
 
 			<button type="submit" class="btn btn-primary">
-				{{ "user.log_in"|trans }}
+				{{ "devture_user.log_in"|trans }}
 			</button>
 		</fieldset>
 	</form>
 
-	{% if app['user.browser_id.enabled'] %}
+	{% if app['devture_user.browser_id.enabled'] %}
+		<br />
+
 		<style type="text/css">{% include "DevtureUserBundle/browser_id/persona-buttons.css.twig" %}</style>
 
-		<div class="text-center top-spaced-major">
+		<div class="text-center">
 			<hr style="width: 60%; margin: 0 auto;" />
 
-			<div class="top-spaced-major" id="js-browser-id-login-trigger">
-				<span class="muted">{{ "user.browser_id.or"|trans }}</span>
+			<br />
+
+			<div id="js-browser-id-login-trigger">
+				<span class="muted">{{ "devture_user.browser_id.or"|trans }}</span>
 				<a href="javascript://" class="persona-button dark">
-					<span>{{ "user.browser_id.log_in_with_your_email_address"|trans }}</span>
+					<span>{{ "devture_user.browser_id.log_in_with_your_email_address"|trans }}</span>
 				</a>
 			</div>
 
-			<div class="top-spaced-major hide" id="js-browser-id-working">
-				{{ "user.browser_id.logging_you_in"|trans }}
+			<br />
+
+			<div class="hide" id="js-browser-id-working">
+				{{ "devture_user.browser_id.logging_you_in"|trans }}
 			</div>
 		</div>
 	{% endif %}
@@ -54,7 +60,7 @@
 
 	$('#username').focus();
 
-	{% if app['user.browser_id.enabled'] %}
+	{% if app['devture_user.browser_id.enabled'] %}
 	comploader.load("browserid", function () {
 		navigator.id.watch({
 			"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
@@ -64,14 +70,14 @@
 				$.ajax({
 					"type": "POST",
 					"dataType": "json",
-					"url": {{ path_localized('user.browser_id.login')|json_encode|raw }},
+					"url": {{ path('devture_user.browser_id.login')|json_encode|raw }},
 					"data": {"assertion": assertion},
 					"success": function (response, status, xhr) {
 						if (response.ok) {
 							window.location.reload();
 						} else {
 							$('#js-browser-id-working').hide();
-							alert({{ "user.browser_id.unknown_email_or_other_login_failure"|trans|json_encode|raw }});
+							alert({{ "devture_user.browser_id.unknown_email_or_other_login_failure"|trans|json_encode|raw }});
 							navigator.id.logout();
 						}
 						window.location.reload();

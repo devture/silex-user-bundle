@@ -4,12 +4,13 @@ namespace Devture\Bundle\UserBundle\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
+use Devture\Component\Form\Helper\StringHelper;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Helper\AuthHelper;
 
 class LoginManager {
 
-	const COOKIE_NAME = 'user';
+	const COOKIE_NAME = 'devture_user';
 	const COOKIE_VALIDITY_TIME = 43200; //12 hours
 	const COOKIE_EXTEND_AFTER_TIME = 1800; //30 minutes
 
@@ -19,7 +20,7 @@ class LoginManager {
 	const FIELD_PAYLOAD_USERNAME = 'u';
 	const FIELD_PAYLOAD_TOKEN = 't';
 
-	const REQUEST_ATTRIBUTE_EXTEND_SESSION = 'user.extend_session';
+	const REQUEST_ATTRIBUTE_EXTEND_SESSION = 'devture_user.extend_session';
 
 	private $helper;
 	private $cookiePayloadSignKey;
@@ -51,7 +52,7 @@ class LoginManager {
 			return null;
 		}
 
-		$user =  $this->helper->authenticateWithToken($payload[self::FIELD_PAYLOAD_USERNAME], $payload[self::FIELD_PAYLOAD_TOKEN]);
+		$user = $this->helper->authenticateWithToken($payload[self::FIELD_PAYLOAD_USERNAME], $payload[self::FIELD_PAYLOAD_TOKEN]);
 
 		if ($user !== null && $creationTime < time() - self::COOKIE_EXTEND_AFTER_TIME) {
 			//The current session cookie is valid and can be tied to a user,

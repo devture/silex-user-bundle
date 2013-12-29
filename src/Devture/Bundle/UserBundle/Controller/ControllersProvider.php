@@ -15,31 +15,31 @@ class ControllersProvider implements ControllerProviderInterface {
 	public function connect(Application $app) {
 		$controllers = $app['controllers_factory'];
 
-		$controllers->match('/login', 'user.controller.user:loginAction')
-			->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.login');
+		$controllers->match('/login', 'devture_user.controller.user:loginAction')
+			->method('GET|POST')->bind('devture_user.login');
 
 		if ($this->browserIdEnabled) {
-			$controllers->post('/_login/browser-id', 'user.controller.browser_id:loginAction')
-				->value('locale', $app['default_locale'])->bind('user.browser_id.login');
+			$controllers->post('/_login/browser-id', 'devture_user.controller.browser_id:loginAction')
+				->bind('devture_user.browser_id.login');
 		}
 
-		$controllers->post('/logout/{token}', 'user.controller.user:logoutAction')
-			->value('locale', $app['default_locale'])->bind('user.logout');
+		$controllers->post('/logout/{token}', 'devture_user.controller.user:logoutAction')
+			->bind('devture_user.logout');
 
-		$controllers->get('/logged-out', 'user.controller.user:loggedOutAction')
-			->value('locale', $app['default_locale'])->bind('user.logged_out');
+		$controllers->get('/logged-out', 'devture_user.controller.user:loggedOutAction')
+			->bind('devture_user.logged_out');
 
-		$controllers->get('/manage', 'user.controller.user:manageAction')
-			->value('locale', $app['default_locale'])->bind('user.manage');
+		$controllers->get('/manage', 'devture_user.controller.user:manageAction')
+			->bind('devture_user.manage');
 
-		$controllers->match('/add', 'user.controller.user:addAction')
-			->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.add');
+		$controllers->match('/add', 'devture_user.controller.user:addAction')
+			->method('GET|POST')->bind('devture_user.add');
 
-		$controllers->match('/edit/{id}', 'user.controller.user:editAction')
-			->value('locale', $app['default_locale'])->method('GET|POST')->bind('user.edit');
+		$controllers->match('/edit/{id}', 'devture_user.controller.user:editAction')
+			->method('GET|POST')->bind('devture_user.edit');
 
-		$controllers->post('/_delete/{id}/{token}', 'user.controller.user:deleteAction')
-			->value('locale', $app['default_locale'])->bind('user.delete');
+		$controllers->post('/_delete/{id}/{token}', 'devture_user.controller.user:deleteAction')
+			->bind('devture_user.delete');
 
 		return $controllers;
 	}

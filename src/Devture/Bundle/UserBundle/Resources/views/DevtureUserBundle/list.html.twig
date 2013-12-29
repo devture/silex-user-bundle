@@ -1,17 +1,17 @@
 {% if items|length == 0 %}
-	{{ "user.no_items"|trans }}
+	{{ "devture_user.no_items"|trans }}
 {% else %}
 	<table class="table table-bordered table-striped">
 		<thead>
 			<tr>
-				<th>{{ "user.username"|trans }}</th>
-				<th>{{ "user.email"|trans }}</th>
-				<th>{{ "user.name"|trans }}</th>
+				<th>{{ "devture_user.username"|trans }}</th>
+				<th>{{ "devture_user.email"|trans }}</th>
+				<th>{{ "devture_user.name"|trans }}</th>
 			</tr>
 		</thead>
 		<tbody>
 		{% for entity in items %}
-			{% set link = path_localized('user.edit', {'id': entity.id}) %}
+			{% set link = path('devture_user.edit', {'id': entity.id}) %}
 			<tr>
 				<td>
 					<a href="{{ link }}" class="display-block">

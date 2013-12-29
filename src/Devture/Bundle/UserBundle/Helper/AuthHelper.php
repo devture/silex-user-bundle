@@ -2,7 +2,8 @@
 namespace Devture\Bundle\UserBundle\Helper;
 
 use browserid\Verifier;
-use Devture\Bundle\SharedBundle\Exception\NotFound;
+use Devture\Component\DBAL\Exception\NotFound;
+use Devture\Component\Form\Helper\StringHelper;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 use Devture\Bundle\UserBundle\Model\User;
 
@@ -51,7 +52,7 @@ class AuthHelper {
 		} catch (NotFound $e) {
 			return null;
 		}
-		if ($this->createPasswordToken($user) !== $passwordToken) {
+		if (!StringHelper::equals($this->createPasswordToken($user), $passwordToken)) {
 			return null;
 		}
 		return $user;
