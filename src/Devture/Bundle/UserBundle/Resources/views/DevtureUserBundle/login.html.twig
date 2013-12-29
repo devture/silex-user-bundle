@@ -5,7 +5,8 @@
 
 	<form name="devture_user_login" id="devture_user_login" class="form-signin" method="post" action="" role="form">
 		{% if error %}
-			<div class="text-danger bottom-spaced-minor">{{ error }}</div>
+			<div class="text-danger">{{ error|trans }}</div>
+			<br />
 		{% endif %}
 
 		<fieldset>

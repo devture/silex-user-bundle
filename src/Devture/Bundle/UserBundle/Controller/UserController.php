@@ -23,7 +23,7 @@ class UserController extends BaseController {
 				$response = $this->redirect($next);
 				return $this->getLoginManager()->login($user, $response);
 			} else {
-				$error = $this->get('translator')->trans('devture_user.wrong_credentials');
+				$error = 'devture_user.wrong_credentials';
 			}
 		}
 
