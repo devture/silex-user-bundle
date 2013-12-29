@@ -13,10 +13,8 @@ class ServicesProvider implements ServiceProviderInterface {
 	public function __construct(array $config) {
 		$config = array_merge(array(
 			'database_type' => 'mongodb', //relational, mongodb
-			'browser_id' => array(
-				'enabled' => false,
-				'audience' => null,
-			),
+			'browser_id.enabled' => false,
+			'browser_id.audience' => null,
 			'cookie_path' => '/',
 			'blowfish_cost' => 13,
 			'roles' => array(), //role key => description
@@ -29,6 +27,10 @@ class ServicesProvider implements ServiceProviderInterface {
 			}
 		}
 
+		if ($config['browser_id.enabled'] && $config['browser_id.audience'] === null) {
+			throw new \InvalidArgumentException('The browser_id.audience parameter needs to be specified to enable BrowserID.');
+		}
+
 		$this->config = $config;
 	}
 
@@ -39,8 +41,8 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app['devture_user.roles'] = $config['roles'];
 
-		$app['devture_user.browser_id.enabled'] = $config['browser_id']['enabled'];
-		$app['devture_user.browser_id.audience'] = $config['browser_id']['audience'];
+		$app['devture_user.browser_id.enabled'] = $config['browser_id.enabled'];
+		$app['devture_user.browser_id.audience'] = $config['browser_id.audience'];
 
 		if ($app['devture_user.browser_id.enabled']) {
 			$app['devture_user.browser_id.verifier'] = function ($app) {
