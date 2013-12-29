@@ -141,7 +141,7 @@ class LoginManager {
 			return null;
 		}
 
-		$data = json_decode($json, true, 5);
+		$data = json_decode($json, true, 3);
 		if (!is_array($data)) {
 			return null;
 		}
