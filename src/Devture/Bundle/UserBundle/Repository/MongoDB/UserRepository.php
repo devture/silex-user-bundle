@@ -13,7 +13,7 @@ class UserRepository extends BaseMongoRepository implements UserRepositoryInterf
 	}
 
 	protected function getCollectionName() {
-		return 'user';
+		return 'devture_user';
 	}
 
 	/**

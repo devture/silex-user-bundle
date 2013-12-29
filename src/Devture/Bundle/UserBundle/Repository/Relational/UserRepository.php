@@ -13,7 +13,7 @@ class UserRepository extends BaseSqlRepository implements UserRepositoryInterfac
 	}
 
 	protected function getTableName() {
-		return 'user';
+		return 'devture_user';
 	}
 
 	public function findByUsername($username) {
