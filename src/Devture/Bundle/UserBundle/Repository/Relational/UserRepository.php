@@ -24,6 +24,10 @@ class UserRepository extends BaseSqlRepository implements UserRepositoryInterfac
 		return $this->findOneByQuery("SELECT * FROM " . $this->getTableName() . " WHERE email = ? LIMIT 1", array($email));
 	}
 
+	public function ensureIndexes() {
+		//no-op
+	}
+
 	/**
 	 * @param User $model
 	 * @return array

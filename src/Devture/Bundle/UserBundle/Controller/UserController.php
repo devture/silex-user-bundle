@@ -52,6 +52,8 @@ class UserController extends BaseController {
 	}
 
 	public function manageAction() {
+		$this->getRepository()->ensureIndexes();
+
 		return $this->renderView('DevtureUserBundle/index.html.twig', array(
 			'items' => $this->getRepository()->findAll(),
 		));

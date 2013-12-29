@@ -9,4 +9,6 @@ interface UserRepositoryInterface extends RepositoryInterface {
 
 	public function findByEmail($email);
 
+	public function ensureIndexes();
+
 }
