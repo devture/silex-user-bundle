@@ -20,7 +20,8 @@
 			"or": "или",
 			"log_in_with_your_email_address": "влезте с имейл адреса си",
 			"logging_you_in": "Влизане в системата.. Моля изчакайте..",
-			"unknown_email_or_other_login_failure": "Непознат имейл адрес или друга грешка по време на вход."
+			"unknown_email_or_other_login_failure": "Непознат имейл адрес или друга грешка по време на вход.",
+			"can_be_used_for_logging_in": "Може да се използва за вход с %browser_id%."
 		},
 		"validation": {
 			"password_empty": "Паролата не може да бъде празна.",

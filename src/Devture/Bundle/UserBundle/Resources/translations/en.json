@@ -20,7 +20,8 @@
 			"or": "or",
 			"log_in_with_your_email_address": "log in with your email address",
 			"logging_you_in": "Logging you in.. Please wait..",
-			"unknown_email_or_other_login_failure": "Unknown email address or other login failure."
+			"unknown_email_or_other_login_failure": "Unknown email address or other login failure.",
+			"can_be_used_for_logging_in": "Can be used for logging in using %browser_id%."
 		},
 		"validation": {
 			"password_empty": "The password cannot be empty.",
