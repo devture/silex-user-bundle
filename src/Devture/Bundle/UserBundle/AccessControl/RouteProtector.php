@@ -5,21 +5,21 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RouteProtector implements RouteProtectorInterface {
 
-	private $app;
+	private $accessControl;
 	private $routeName;
 	private $requiredRole;
 
-	public function __construct(\Silex\Application $app, $routeName, $requiredRole) {
-		$this->app = $app;
+	public function __construct(AccessControl $accessControl, $routeName, $requiredRole) {
+		$this->accessControl = $accessControl;
 		$this->routeName = $routeName;
 		$this->requiredRole = $requiredRole;
 	}
 
-	public function shouldProtect(Request $request) {
+	public function isAllowed(Request $request) {
 		if ($request->attributes->get('_route') !== $this->routeName) {
-			return false;
+			return true;
 		}
-		return !$this->app['devture_user.access_control']->isGranted($this->requiredRole);
+		return $this->accessControl->isGranted($this->requiredRole);
 	}
 
 }

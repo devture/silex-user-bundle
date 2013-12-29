@@ -62,7 +62,7 @@ class UserController extends BaseController {
 	public function addAction(Request $request) {
 		$entity = $this->getRepository()->createModel(array());
 
-		$binder = $this->getNs('form_binder');
+		$binder = $this->getFormBinder();
 
 		if ($request->getMethod() === 'POST' && $binder->bind($entity, $request)) {
 			$this->getRepository()->add($entity);
@@ -84,7 +84,7 @@ class UserController extends BaseController {
 			return $this->abort(404);
 		}
 
-		$binder = $this->getNs('form_binder');
+		$binder = $this->getFormBinder();
 
 		if ($request->getMethod() === 'POST' && $binder->bind($entity, $request)) {
 			$this->getRepository()->update($entity);
@@ -109,7 +109,14 @@ class UserController extends BaseController {
 			}
 			return $this->json(array('ok' => true));
 		}
-		return $this->json(array());
+		return $this->json(array('ok' => false));
+	}
+
+	/**
+	 * @return \Devture\Bundle\UserBundle\Form\FormBinder
+	 */
+	private function getFormBinder() {
+		return $this->getNs('form_binder');
 	}
 
 }

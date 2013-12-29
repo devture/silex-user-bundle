@@ -110,6 +110,10 @@ class ServicesProvider implements ServiceProviderInterface {
 			}
 		});
 
+		$app['devture_user.twig.user_extension'] = $app->share(function ($app) {
+			return new Twig\UserExtension($app['devture_user.access_control'], $app);
+		});
+
 		$this->registerConsoleServices($app);
 
 		$this->registerControllerServices($app);
@@ -147,11 +151,11 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app->before($app['devture_user.listener.user_from_request_initializer']);
 		$app->before($app['devture_user.listener.csrf_token_manager_salter']);
-		$app->before($app['devture_user.access_control']->getEnforcer());
+		$app->before(array($app['devture_user.access_control'], 'enforceProtection'));
 		$app->after($app['devture_user.listener.conditional_session_extender']);
 
 		$app['twig.loader.filesystem']->addPath(dirname(__FILE__) . '/Resources/views/');
-		$app['twig']->addExtension(new Twig\Extension\UserExtension($app['devture_user.access_control'], $app));
+		$app['twig']->addExtension($app['devture_user.twig.user_extension']);
 
 		if (isset($app['console'])) {
 			$app['console']->add($app['devture_user.console.command.add_user']);

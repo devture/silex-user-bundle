@@ -2,31 +2,30 @@
 namespace Devture\Bundle\UserBundle\AccessControl;
 
 use Symfony\Component\HttpFoundation\Request;
-use Devture\Bundle\UserBundle\AccessControl\RouteProtectorInterface;
 
 class RoutePrefixProtector implements RouteProtectorInterface {
 
-	private $app;
+	private $accessControl;
 	private $routePrefix;
 	private $requiredRole;
 	private $whitelistedRoutes;
 
-	public function __construct(\Silex\Application $app, $routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
-		$this->app = $app;
+	public function __construct(AccessControl $accessControl, $routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
+		$this->accessControl = $accessControl;
 		$this->routePrefix = $routePrefix;
 		$this->requiredRole = $requiredRole;
 		$this->whitelistedRoutes = $whitelistedRoutes;
 	}
 
-	public function shouldProtect(Request $request) {
+	public function isAllowed(Request $request) {
 		$routeName = $request->attributes->get('_route');
 		if (strpos($routeName, $this->routePrefix) !== 0) {
-			return false;
+			return true;
 		}
 		if (in_array($routeName, $this->whitelistedRoutes)) {
-			return false;
+			return true;
 		}
-		return !$this->app['devture_user.access_control']->isGranted($this->requiredRole);
+		return $this->accessControl->isGranted($this->requiredRole);
 	}
 
 }

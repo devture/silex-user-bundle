@@ -5,6 +5,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface RouteProtectorInterface {
 
-	public function shouldProtect(Request $request);
+	public function isAllowed(Request $request);
 
 }

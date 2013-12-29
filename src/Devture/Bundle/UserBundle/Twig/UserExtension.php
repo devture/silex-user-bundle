@@ -1,17 +1,14 @@
 <?php
-namespace Devture\Bundle\UserBundle\Twig\Extension;
+namespace Devture\Bundle\UserBundle\Twig;
 
 use Devture\Bundle\UserBundle\AccessControl\AccessControl;
-use Devture\Bundle\UserBundle\Model\User;
 
 class UserExtension extends \Twig_Extension {
 
 	private $control;
-	private $container;
 
-	public function __construct(AccessControl $control, \Pimple $container) {
+	public function __construct(AccessControl $control) {
 		$this->control = $control;
-		$this->container = $container;
 	}
 
 	public function getName() {
@@ -27,17 +24,17 @@ class UserExtension extends \Twig_Extension {
 	}
 
 	/**
-	 * @return User|NULL
+	 * @return \Devture\Bundle\UserBundle\Model\User|NULL
 	 */
 	public function getUser() {
-		return $this->container['user'];
+		return $this->control->getUser();
 	}
 
 	/**
 	 * @return boolean
 	 */
 	public function isLoggedIn() {
-		return ($this->container['user'] !== null);
+		return $this->control->isLoggedIn();
 	}
 
 	/**

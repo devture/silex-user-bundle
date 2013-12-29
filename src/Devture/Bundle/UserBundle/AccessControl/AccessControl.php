@@ -13,20 +13,35 @@ class AccessControl {
 		$this->app = $app;
 	}
 
-	public function isGranted($role) {
-		$user = $this->app['user'];
-		if (!($user instanceof User)) {
-			return false;
-		}
-		return $user->hasRole($role) || $user->hasRole(User::ROLE_MASTER);
+	/**
+	 * @return User|NULL
+	 */
+	public function getUser() {
+		return $this->app['user'];
 	}
 
 	public function isLoggedIn() {
-		return ($this->app['user'] instanceof User);
+		return ($this->getUser() instanceof User);
 	}
 
-	public function getEnforcer() {
-		return array($this, 'enforceProtection');
+	public function isGranted($role) {
+		if (!$this->isLoggedIn()) {
+			return false;
+		}
+		$user = $this->getUser();
+		return $user->hasRole($role) || $user->hasRole(User::ROLE_MASTER);
+	}
+
+	public function protectRoute($routeName, $requiredRole) {
+		$this->addRouteProtector(new RouteProtector($this, $routeName, $requiredRole));
+	}
+
+	public function protectRoutePrefix($routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
+		$this->addRouteProtector(new RoutePrefixProtector($this, $routePrefix, $requiredRole, $whitelistedRoutes));
+	}
+
+	public function addRouteProtector(RouteProtectorInterface $protector) {
+		$this->routeProtectors[] = $protector;
 	}
 
 	/**
@@ -40,7 +55,7 @@ class AccessControl {
 	 **/
 	public function enforceProtection(Request $request) {
 		foreach ($this->routeProtectors as $protector) {
-			if ($protector->shouldProtect($request)) {
+			if (!$protector->isAllowed($request)) {
 				if ($this->isLoggedIn()) {
 					return $this->app->abort(401);
 				}
@@ -49,22 +64,24 @@ class AccessControl {
 		}
 	}
 
-	public function protectRoute($routeName, $requiredRole) {
-		$this->addRouteProtector(new RouteProtector($this->app, $routeName, $requiredRole));
-	}
-
-	public function protectRoutePrefix($routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
-		$this->addRouteProtector(new RoutePrefixProtector($this->app, $routePrefix, $requiredRole, $whitelistedRoutes));
-	}
-
-	public function addRouteProtector(RouteProtectorInterface $protector) {
-		$this->routeProtectors[] = $protector;
-	}
-
 	private function redirectToLogin() {
-		$next = $this->app['request']->getRequestUri();
-		$url = $this->app['url_generator']->generate('devture_user.login', array('next' => $next));
+		$next = $this->getRequest()->getRequestUri();
+		$url = $this->getUrlGenerator()->generate('devture_user.login', array('next' => $next));
 		return $this->app->redirect($url);
+	}
+
+	/**
+	 * @return \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+	 */
+	private function getUrlGenerator() {
+		return $this->app['url_generator'];
+	}
+
+	/**
+	 * @return Request
+	 */
+	private function getRequest() {
+		return $this->app['request'];
 	}
 
 }
