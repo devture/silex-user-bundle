@@ -158,7 +158,10 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app->before(array($app['devture_user.access_control'], 'enforceProtection'));
 		$app->after($app['devture_user.listener.conditional_session_extender']);
 
-		$app['twig.loader.filesystem']->addPath(dirname(__FILE__) . '/Resources/views/');
+		//Also register the templates path at a custom namespace, to allow templates overriding+extending.
+		$app['twig.loader.filesystem']->addPath(__DIR__ . '/Resources/views/');
+		$app['twig.loader.filesystem']->addPath(__DIR__ . '/Resources/views/', 'DevtureUserBundle');
+
 		$app['twig']->addExtension($app['devture_user.twig.user_extension']);
 
 		if (isset($app['console'])) {
