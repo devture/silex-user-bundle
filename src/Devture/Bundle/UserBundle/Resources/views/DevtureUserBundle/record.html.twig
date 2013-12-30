@@ -59,7 +59,7 @@
 			{% if roles|length != 0 %}
 			<div class="form-group row">
 				<label class="col-lg-2 control-label">{{ "devture_user.roles"|trans }}</label>
-				<div class="col-lg-6">
+				<div class="col-lg-10">
 					{% for role, title in roles %}
 						{% set hasRole = entity.hasRole(role) %}
 						{% set class = (role == 'all' ? 'fbold' : 'js-cbx-role') %}
