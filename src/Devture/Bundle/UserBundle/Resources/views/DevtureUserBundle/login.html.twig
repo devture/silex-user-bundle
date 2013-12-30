@@ -55,7 +55,7 @@
 	navigator.id.watch({
 		"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
 		"onlogin": function (assertion) {
-			$('#js-browser-id-working').show();
+			$('#js-browser-id-working').show().removeClass('hide');
 
 			$.ajax({
 				"type": "POST",
