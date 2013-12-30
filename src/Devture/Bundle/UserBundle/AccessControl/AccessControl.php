@@ -32,12 +32,20 @@ class AccessControl {
 		return $user->hasRole($role) || $user->hasRole(User::ROLE_MASTER);
 	}
 
-	public function protectRoute($routeName, $requiredRole) {
-		$this->addRouteProtector(new RouteProtector($this, $routeName, $requiredRole));
+	public function requireAuthForRoute($routeName) {
+		$this->addRouteProtector(new RequiredAuthRouteProtector($routeName));
 	}
 
-	public function protectRoutePrefix($routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
-		$this->addRouteProtector(new RoutePrefixProtector($this, $routePrefix, $requiredRole, $whitelistedRoutes));
+	public function requireAuthForRoutePrefix($routePrefix, array $whitelistedRoutes = array()) {
+		$this->addRouteProtector(new RequiredAuthRoutePrefixProtector($routePrefix, $whitelistedRoutes));
+	}
+
+	public function requireRoleForRoute($routeName, $requiredRole) {
+		$this->addRouteProtector(new RequiredRoleRouteProtector($routeName, $requiredRole));
+	}
+
+	public function requireRoleForRoutePrefix($routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
+		$this->addRouteProtector(new RequiredRoleRoutePrefixProtector($routePrefix, $requiredRole, $whitelistedRoutes));
 	}
 
 	public function addRouteProtector(RouteProtectorInterface $protector) {
@@ -55,7 +63,7 @@ class AccessControl {
 	 **/
 	public function enforceProtection(Request $request) {
 		foreach ($this->routeProtectors as $protector) {
-			if (!$protector->isAllowed($request)) {
+			if (!$protector->isAllowed($this, $request)) {
 				if ($this->isLoggedIn()) {
 					return $this->app->abort(401);
 				}

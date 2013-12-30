@@ -3,21 +3,17 @@ namespace Devture\Bundle\UserBundle\AccessControl;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class RoutePrefixProtector implements RouteProtectorInterface {
+class RequiredAuthRoutePrefixProtector implements RouteProtectorInterface {
 
-	private $accessControl;
 	private $routePrefix;
-	private $requiredRole;
 	private $whitelistedRoutes;
 
-	public function __construct(AccessControl $accessControl, $routePrefix, $requiredRole, array $whitelistedRoutes = array()) {
-		$this->accessControl = $accessControl;
+	public function __construct($routePrefix, array $whitelistedRoutes = array()) {
 		$this->routePrefix = $routePrefix;
-		$this->requiredRole = $requiredRole;
 		$this->whitelistedRoutes = $whitelistedRoutes;
 	}
 
-	public function isAllowed(Request $request) {
+	public function isAllowed(AccessControl $accessControl, Request $request) {
 		$routeName = $request->attributes->get('_route');
 		if (strpos($routeName, $this->routePrefix) !== 0) {
 			return true;
@@ -25,7 +21,7 @@ class RoutePrefixProtector implements RouteProtectorInterface {
 		if (in_array($routeName, $this->whitelistedRoutes)) {
 			return true;
 		}
-		return $this->accessControl->isGranted($this->requiredRole);
+		return $accessControl->isLoggedIn();
 	}
 
 }
