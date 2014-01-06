@@ -15,6 +15,7 @@
 		"silex/silex": ">=1.0,<1.2",
 		"devture/silex-framework-bundle": "1.0.*",
 		"devture/silex-localization-bundle": "2.0.*",
+		"devture/dbal": "1.0.*",
 		"browserid/browserid": "1.0.*"
 	},
 	"suggest": {
