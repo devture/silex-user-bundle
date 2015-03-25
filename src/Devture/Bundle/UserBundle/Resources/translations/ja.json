@@ -1,0 +1,38 @@
+{
+	"devture_user": {
+		"no_items": "ユーザーはいません。",
+		"users": "ユーザー",
+		"add_new": "新規追加",
+		"username": "ユーザー名",
+		"email": "メールアドレス",
+		"name": "名前",
+		"password": "パスワード",
+		"roles": "アクセス権限",
+		"save": "保存",
+		"delete": "削除",
+		"confirm_delete": "ユーザーを削除してよろしいですか？",
+		"logout": "ログアウト",
+		"log_in": "ログイン",
+		"browser_id": {
+			"logging_you_in": "ログインしています...しばらくお待ちください...",
+			"log_in_with_your_email_address": "メールアドレスでログイン",
+			"unknown_email_or_other_login_failure": "メールアドレスが正しくないか、他に問題があります。",
+			"can_be_used_for_logging_in": "%browser_id% でログイン",
+			"or": "または"
+		},
+		"validation": {
+			"password_empty": "パスワードを入力してください。",
+			"password_too_long": "パスワードが長すぎます。",
+			"invalid_username": "ユーザー名を半角英字で入力してください。",
+			"username_in_use": "そのユーザー名は既に使用されています。",
+			"email": {
+				"invalid": "メールアドレスを正しく入力してください。",
+				"in_use": "このメールアドレスは %username% さんが既に使用しています。"
+			},
+			"invalid_roles": "権限が無効です。"
+		},
+		"wrong_credentials": "ユーザー名またはパスワードが間違っています。",
+		"password_empty_to_preserve": "パスワードを変更しない場合は空白のまま保存してください。",
+		"logged_out_successfully": "ログアウトしました。"
+	}
+}
