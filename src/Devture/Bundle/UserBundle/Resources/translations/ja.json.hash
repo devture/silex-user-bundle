@@ -16,6 +16,7 @@
 	"devture_user.browser_id.log_in_with_your_email_address": "424c982253dee2d1a589edb7e2f8e7a4eecefeb8ed9fb1cda282584e682927bb",
 	"devture_user.browser_id.unknown_email_or_other_login_failure": "f0051f8c4797458a4d7fc9e6a2c32927362937cc6160b8536885c46cd79e1eb9",
 	"devture_user.browser_id.can_be_used_for_logging_in": "d893a4caf11142f7eedd8fb703539aa8bd587e530fb285fac8478843fe43cc99",
+	"devture_user.browser_id.or": "7175517a370b5cd2e664e3fd29c4ea9db5ce17058eb9772fe090a5485e49dad6",
 	"devture_user.validation.password_empty": "7287909bc80690847082a301c8465c7616f418192cc6d2b6e22d9682f149a7bb",
 	"devture_user.validation.password_too_long": "6c1e19b4bc4eedc4d1450a14f8e4f36308f89787722e566578100e11f65167c8",
 	"devture_user.validation.invalid_username": "e2859d06a6f904fec400aad9c58cfbf311f7db7c64e6c892f389046b208361d0",
@@ -25,6 +26,5 @@
 	"devture_user.validation.invalid_roles": "df44e5bc96160f1cc53f68c92340892cb4c5996a5ae04d50d4d1861b890ca5c6",
 	"devture_user.wrong_credentials": "f20814fd0914adf9daa8d378cfdc5a1f915758a63d82cc882367756dbde89db9",
 	"devture_user.password_empty_to_preserve": "b4b704e2c57417fe2a624afa8e1a41a17b230001a1a09a8240cdc61634f97b05",
-	"devture_user.logged_out_successfully": "bac807e9c08a4c3dc96b7877a5ae8dac864ff3ec0b5abb1887e7315ca15be834",
-	"devture_user.browser_id.or": "7175517a370b5cd2e664e3fd29c4ea9db5ce17058eb9772fe090a5485e49dad6"
+	"devture_user.logged_out_successfully": "bac807e9c08a4c3dc96b7877a5ae8dac864ff3ec0b5abb1887e7315ca15be834"
 }

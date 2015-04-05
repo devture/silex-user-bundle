@@ -23,7 +23,7 @@
 		"validation": {
 			"password_empty": "パスワードを入力してください。",
 			"password_too_long": "パスワードが長すぎます。",
-			"invalid_username": "ユーザー名を半角英字で入力してください。",
+			"invalid_username": "ユーザー名を半角英数字で入力してください。",
 			"username_in_use": "そのユーザー名は既に使用されています。",
 			"email": {
 				"invalid": "メールアドレスを正しく入力してください。",
