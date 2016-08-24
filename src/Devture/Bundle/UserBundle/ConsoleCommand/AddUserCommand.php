@@ -5,7 +5,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Question\Question;
 use Devture\Component\DBAL\Exception\NotFound;
 use Devture\Bundle\UserBundle\Model\User;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
@@ -31,6 +32,9 @@ class AddUserCommand extends Command {
 
 		$repository = $this->getRepository();
 
+		/* @var $entity User */
+		$entity = $repository->createModel(array());
+
 		try {
 			$repository->findByUsername($username);
 			$output->writeln(sprintf('A user with the username %s already exists.', $username));
@@ -38,6 +42,7 @@ class AddUserCommand extends Command {
 		} catch (NotFound $e) {
 
 		}
+		$entity->setUsername($username);
 
 		if ($email) {
 			try {
@@ -47,21 +52,19 @@ class AddUserCommand extends Command {
 			} catch (NotFound $e) {
 
 			}
+			$entity->setEmail($username);
 		}
 
-		$dialog = new DialogHelper();
-		$dialog->setInput($input);
-		$password = $dialog->askHiddenResponse(
-			$output,
-			'Enter a password: ',
-			false
-		);
+		$questionHelper = new QuestionHelper();
 
-		/* @var $entity User */
-		$entity = $repository->createModel(array());
-		$entity->setUsername($username);
-		$entity->setEmail($email ?: null);
+		$question = new Question(sprintf('<question>%s</question>: ', 'Name (not required):'));
+		$entity->setName($questionHelper->ask($input, $output, $question));
+
+		$question = new Question(sprintf('<question>%s</question>: ', 'Enter a password:'));
+		$question->setHidden(true);
+		$password = $questionHelper->ask($input, $output, $question);
 		$entity->setPassword($this->getPasswordEncoder()->encodePassword($password));
+
 		$entity->setRoles(array(User::ROLE_MASTER));
 
 		$repository->add($entity);

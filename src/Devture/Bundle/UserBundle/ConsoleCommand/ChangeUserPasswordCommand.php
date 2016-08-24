@@ -5,7 +5,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Question\Question;
 use Devture\Component\DBAL\Exception\NotFound;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
 
@@ -35,13 +36,11 @@ class ChangeUserPasswordCommand extends Command {
 			return 1;
 		}
 
-		$dialog = new DialogHelper();
-		$dialog->setInput($input);
-		$password = $dialog->askHiddenResponse(
-			$output,
-			'Enter a password: ',
-			false
-		);
+		$questionHelper = new QuestionHelper();
+
+		$question = new Question(sprintf('<question>%s</question>: ', 'Enter a password: '));
+		$question->setHidden(true);
+		$password = $questionHelper->ask($input, $output, $question);
 		$entity->setPassword($this->getPasswordEncoder()->encodePassword($password));
 
 		$repository->update($entity);
