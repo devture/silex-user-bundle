@@ -17,9 +17,9 @@ class UserExtension extends \Twig_Extension {
 
 	public function getFunctions() {
 		return array(
-			'get_user' => new \Twig_Function_Method($this, 'getUser'),
-			'is_logged_in' => new \Twig_Function_Method($this, 'isLoggedIn'),
-			'is_granted' => new \Twig_Function_Method($this, 'isGranted'),
+			new \Twig_SimpleFunction('get_user', array($this, 'getUser')),
+			new \Twig_SimpleFunction('is_logged_in', array($this, 'isLoggedIn')),
+			new \Twig_SimpleFunction('is_granted', array($this, 'isGranted')),
 		);
 	}
 
