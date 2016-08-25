@@ -1,7 +1,6 @@
 <?php
 namespace Devture\Bundle\UserBundle\Helper;
 
-use browserid\Verifier;
 use Devture\Component\DBAL\Exception\NotFound;
 use Devture\Component\Form\Helper\StringHelper;
 use Devture\Bundle\UserBundle\Repository\UserRepositoryInterface;
@@ -12,16 +11,11 @@ class AuthHelper {
 	private $repository;
 	private $encoder;
 	private $passwordTokenSalt;
-	private $browserIdVerifier;
 
 	public function __construct(UserRepositoryInterface $repository, PasswordEncoder $encoder, $passwordTokenSalt) {
 		$this->repository = $repository;
 		$this->encoder = $encoder;
 		$this->passwordTokenSalt = $passwordTokenSalt;
-	}
-
-	public function setBrowserIdVerifier(Verifier $verifier) {
-		$this->browserIdVerifier = $verifier;
 	}
 
 	/**
@@ -56,25 +50,6 @@ class AuthHelper {
 			return null;
 		}
 		return $user;
-	}
-
-	/**
-	 * @param string $assertion
-	 * @return NULL|User
-	 */
-	public function authenticateWithBrowserIdAssertion($assertion) {
-		try {
-			$response = $this->browserIdVerifier->verify($assertion);
-			if ($response->status === 'okay' && $response->email !== null) {
-				return $this->repository->findByEmail($response->email);
-			}
-		} catch (\browserid\Exception $e) {
-
-		} catch (NotFound $e) {
-
-		}
-
-		return null;
 	}
 
 	public function createPasswordToken(User $user) {

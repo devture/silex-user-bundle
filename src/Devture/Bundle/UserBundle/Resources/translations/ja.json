@@ -13,13 +13,6 @@
 		"confirm_delete": "ユーザーを削除してよろしいですか？",
 		"logout": "ログアウト",
 		"log_in": "ログイン",
-		"browser_id": {
-			"logging_you_in": "ログインしています...しばらくお待ちください...",
-			"log_in_with_your_email_address": "メールアドレスでログイン",
-			"unknown_email_or_other_login_failure": "メールアドレスが正しくないか、他に問題があります。",
-			"can_be_used_for_logging_in": "%browser_id% でログイン",
-			"or": "または"
-		},
 		"validation": {
 			"password_empty": "パスワードを入力してください。",
 			"password_too_long": "パスワードが長すぎます。",

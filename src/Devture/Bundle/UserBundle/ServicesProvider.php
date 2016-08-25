@@ -13,9 +13,6 @@ class ServicesProvider implements ServiceProviderInterface {
 	public function __construct(array $config) {
 		$config = array_merge(array(
 			'database_type' => 'mongodb', //relational, mongodb
-			'browser_id.enabled' => false,
-			'browser_id.audience' => null,
-			'browser_id.polyfill' => 'https://login.persona.org/include.js',
 			'cookie_path' => '/',
 			'blowfish_cost' => 13,
 			'roles' => array(), //role key => description
@@ -28,10 +25,6 @@ class ServicesProvider implements ServiceProviderInterface {
 			}
 		}
 
-		if ($config['browser_id.enabled'] && $config['browser_id.audience'] === null) {
-			throw new \InvalidArgumentException('The browser_id.audience parameter needs to be specified to enable BrowserID.');
-		}
-
 		$this->config = $config;
 	}
 
@@ -41,16 +34,6 @@ class ServicesProvider implements ServiceProviderInterface {
 		$app['user'] = null;
 
 		$app['devture_user.roles'] = $config['roles'];
-
-		$app['devture_user.browser_id.enabled'] = $config['browser_id.enabled'];
-		$app['devture_user.browser_id.audience'] = $config['browser_id.audience'];
-		$app['devture_user.browser_id.polyfill'] = $config['browser_id.polyfill'];
-
-		if ($app['devture_user.browser_id.enabled']) {
-			$app['devture_user.browser_id.verifier'] = function ($app) {
-				return new \browserid\Verifier($app['devture_user.browser_id.audience']);
-			};
-		}
 
 		$app['devture_user.db'] = $app->share(function ($app) use ($config) {
 			return $app[$config['database_service_id']];
@@ -73,11 +56,7 @@ class ServicesProvider implements ServiceProviderInterface {
 		});
 
 		$app['devture_user.auth_helper'] = $app->share(function ($app) use ($config) {
-			$helper = new Helper\AuthHelper($app['devture_user.repository'], $app['devture_user.password_encoder'], $config['password_token_salt']);
-			if ($app['devture_user.browser_id.enabled']) {
-				$helper->setBrowserIdVerifier($app['devture_user.browser_id.verifier']);
-			}
-			return $helper;
+			return new Helper\AuthHelper($app['devture_user.repository'], $app['devture_user.password_encoder'], $config['password_token_salt']);
 		});
 
 		$app['devture_user.login_manager'] = $app->share(function ($app) use ($config) {
@@ -134,20 +113,14 @@ class ServicesProvider implements ServiceProviderInterface {
 
 	private function registerControllerServices(Application $app) {
 		$app['devture_user.controllers_provider.management'] = $app->share(function ($app) {
-			return new Controller\ControllersProvider($app['devture_user.browser_id.enabled']);
+			return new Controller\ControllersProvider();
 		});
 
 		$app['devture_user.controller.user'] = $app->share(function ($app) {
 			return new Controller\UserController($app, 'devture_user');
 		});
 
-		if ($app['devture_user.browser_id.enabled']) {
-			$app['devture_user.controller.browser_id'] = $app->share(function ($app) {
-				return new Controller\BrowserIdController($app, 'devture_user');
-			});
-		}
-
-		$app['devture_user.public_routes'] = array('devture_user.login', 'devture_user.browser_id.login', 'devture_user.logout', 'devture_user.logged_out');
+		$app['devture_user.public_routes'] = array('devture_user.login', 'devture_user.logout', 'devture_user.logged_out');
 	}
 
 	public function boot(Application $app) {

@@ -7,4 +7,3 @@ Features:
 - supports both [MongoDB](http://www.mongodb.org/) and relational databases
 - allows protecting Silex named routes (based on user role definitions)
 - allows protecting routes via custom logic
-- supports [Persona/BrowserId](https://login.persona.org/) authentication

@@ -22,11 +22,6 @@
 				<label class="col-lg-2 control-label"><i class="glyphicon glyphicon-envelope"></i> {{ "devture_user.email"|trans }}</label>
 				<div class="col-lg-6">
 					<input type="email" class="form-control" name="email" id="email" value="{{ entity.email }}" />
-					{% if app['devture_user.browser_id.enabled'] %}
-					<p class="help-block">
-						{{ "devture_user.browser_id.can_be_used_for_logging_in"|trans({'%browser_id%': '<a href="https://login.persona.org/" target="_blank">Persona/BrowserID</a>'})|raw }}
-					</p>
-					{% endif %}
 					{{ render_form_violations(form, 'email') }}
 				</div>
 			</div>

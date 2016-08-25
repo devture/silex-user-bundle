@@ -15,8 +15,7 @@
 		"silex/silex": ">=1.0,<1.4",
 		"devture/silex-framework-bundle": "1.0.*",
 		"devture/silex-localization-bundle": "2.0.*",
-		"devture/dbal": "1.*",
-		"browserid/browserid": "1.0.*"
+		"devture/dbal": "1.*"
 	},
 	"suggest": {
 		"symfony/console": "To use the console commands",

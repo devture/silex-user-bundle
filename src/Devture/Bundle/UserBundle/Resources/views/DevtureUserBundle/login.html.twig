@@ -17,74 +17,8 @@
 			</button>
 		</fieldset>
 	</form>
-
-	{% if app['devture_user.browser_id.enabled'] %}
-		<br />
-
-		{% if app['devture_user.browser_id.polyfill'] %}
-			<script src="{{ app['devture_user.browser_id.polyfill']|raw }}"></script>
-		{% endif %}
-
-		<style type="text/css">{% include "DevtureUserBundle/css/persona-buttons.css" %}</style>
-
-		<div class="text-center">
-			<hr style="width: 60%; margin: 0 auto;" />
-
-			<br />
-
-			<div id="js-browser-id-login-trigger">
-				<span class="muted">{{ "devture_user.browser_id.or"|trans }}</span>
-				<a href="javascript://" class="persona-button dark">
-					<span>{{ "devture_user.browser_id.log_in_with_your_email_address"|trans }}</span>
-				</a>
-			</div>
-
-			<br />
-
-			<div class="hide" id="js-browser-id-working">
-				{{ "devture_user.browser_id.logging_you_in"|trans }}
-			</div>
-		</div>
-	{% endif %}
 {% endblock %}
 
 {% block js %}
 	{{ parent() }}
-
-	{% if app['devture_user.browser_id.enabled'] %}
-	navigator.id.watch({
-		"loggedInUser": {{ (app.user ? app.user.username : none)|json_encode|raw }},
-		"onlogin": function (assertion) {
-			$('#js-browser-id-working').show().removeClass('hide');
-
-			$.ajax({
-				"type": "POST",
-				"dataType": "json",
-				"url": {{ path('devture_user.browser_id.login')|json_encode|raw }},
-				"data": {"assertion": assertion},
-				"success": function (response, status, xhr) {
-					if (response.ok) {
-						window.location.reload();
-					} else {
-						$('#js-browser-id-working').hide();
-						alert({{ "devture_user.browser_id.unknown_email_or_other_login_failure"|trans|json_encode|raw }});
-						navigator.id.logout();
-					}
-					window.location.reload();
-				},
-				"error": function (xhr, status, err) {
-					$('#js-browser-id-working').hide();
-					navigator.id.logout();
-				}
-			});
-		},
-		"onlogout": function () {
-			navigator.id.logout();
-		}
-	});
-
-	$('#js-browser-id-login-trigger').click(function () {
-		navigator.id.request();
-	});
-	{% endif %}
 {% endblock %}

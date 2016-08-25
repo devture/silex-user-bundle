@@ -4,16 +4,8 @@
 	<div class="text-center">
 		{{ "devture_user.logged_out_successfully"|trans }}
 	</div>
-
-	{% if app['devture_user.browser_id.enabled'] and app['devture_user.browser_id.polyfill'] %}
-		<script src="{{ app['devture_user.browser_id.polyfill']|raw }}"></script>
-	{% endif %}
 {% endblock %}
 
 {% block js %}
 	{{ parent() }}
-
-	{% if app['devture_user.browser_id.enabled'] %}
-		navigator.id.logout();
-	{% endif %}
 {% endblock %}
