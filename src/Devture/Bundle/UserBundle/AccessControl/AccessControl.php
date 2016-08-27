@@ -48,6 +48,10 @@ class AccessControl {
 		$this->addRouteProtector(new RequiredRoleRoutePrefixProtector($routePrefix, $requiredRole, $whitelistedRoutes));
 	}
 
+	public function requireRoleForRoutePrefixWithPrefixWhitelist($routePrefix, $requiredRole, array $whitelistedPrefixes = array()) {
+		$this->addRouteProtector(new RequiredRoleRoutePrefixWithWhitelistProtector($routePrefix, $requiredRole, $whitelistedPrefixes));
+	}
+
 	public function addRouteProtector(RouteProtectorInterface $protector) {
 		$this->routeProtectors[] = $protector;
 	}
