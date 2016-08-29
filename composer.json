@@ -14,7 +14,7 @@
 		"php": ">=5.3.0",
 		"silex/silex": ">=1.0,<1.4",
 		"devture/silex-framework-bundle": "1.0.*",
-		"devture/silex-localization-bundle": "2.0.*",
+		"devture/silex-localization-bundle": "2.*",
 		"devture/dbal": "1.*"
 	},
 	"suggest": {
