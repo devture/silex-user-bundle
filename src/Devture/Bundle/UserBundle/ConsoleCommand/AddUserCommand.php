@@ -52,7 +52,7 @@ class AddUserCommand extends Command {
 			} catch (NotFound $e) {
 
 			}
-			$entity->setEmail($username);
+			$entity->setEmail($email);
 		}
 
 		$questionHelper = new QuestionHelper();
