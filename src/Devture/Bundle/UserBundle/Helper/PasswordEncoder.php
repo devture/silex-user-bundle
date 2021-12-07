@@ -14,10 +14,6 @@ class PasswordEncoder {
 			throw new \InvalidArgumentException('Cost must be in the range of 4-31');
 		}
 
-		if (!function_exists('password_hash')) {
-			throw new \RuntimeException('PHP 5.5 or the `ircmaxell/password-compat` composer package is required.');
-		}
-
 		$this->cost = $cost;
 	}
 

@@ -2,9 +2,8 @@
 namespace Devture\Bundle\UserBundle\Controller;
 
 use Silex\Application;
-use Silex\ControllerProviderInterface;
 
-class ControllersProvider implements ControllerProviderInterface {
+class ControllersProvider implements \Silex\Api\ControllerProviderInterface {
 
 	public function connect(Application $app) {
 		$controllers = $app['controllers_factory'];

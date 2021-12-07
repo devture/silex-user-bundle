@@ -15,7 +15,7 @@ class AddUserCommand extends Command {
 
 	private $container;
 
-	public function __construct(\Pimple $container) {
+	public function __construct(\Pimple\Container $container) {
 		parent::__construct('devture-user:add');
 		$this->container = $container;
 	}
@@ -26,7 +26,7 @@ class AddUserCommand extends Command {
 		$this->setDescription('Adds a new user account (with full privileges).');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$username = $input->getArgument('username');
 		$email = $input->getArgument('email');
 
@@ -70,6 +70,8 @@ class AddUserCommand extends Command {
 		$repository->add($entity);
 
 		$output->writeln(sprintf('User %s added successfully.', $username));
+
+		return 0;
 	}
 
 	/**

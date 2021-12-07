@@ -3,7 +3,7 @@ namespace Devture\Bundle\UserBundle\Twig;
 
 use Devture\Bundle\UserBundle\AccessControl\AccessControl;
 
-class UserExtension extends \Twig_Extension {
+class UserExtension extends \Twig\Extension\AbstractExtension {
 
 	private $control;
 
@@ -17,9 +17,9 @@ class UserExtension extends \Twig_Extension {
 
 	public function getFunctions() {
 		return array(
-			new \Twig_SimpleFunction('get_user', array($this, 'getUser')),
-			new \Twig_SimpleFunction('is_logged_in', array($this, 'isLoggedIn')),
-			new \Twig_SimpleFunction('is_granted', array($this, 'isGranted')),
+			new \Twig\TwigFunction('get_user', array($this, 'getUser')),
+			new \Twig\TwigFunction('is_logged_in', array($this, 'isLoggedIn')),
+			new \Twig\TwigFunction('is_granted', array($this, 'isGranted')),
 		);
 	}
 

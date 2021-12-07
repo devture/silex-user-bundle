@@ -1,6 +1,6 @@
 # Silex User Bundle
 
-[Silex](http://silex.sensiolabs.org/) bundle that provides user management, authentication and authorization.
+[Silex](https://github.com/silexphp/Silex) bundle that provides user management, authentication and authorization.
 
 Features:
 

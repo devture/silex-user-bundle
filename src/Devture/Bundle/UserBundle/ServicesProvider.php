@@ -4,9 +4,8 @@ namespace Devture\Bundle\UserBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Silex\Application;
-use Silex\ServiceProviderInterface;
 
-class ServicesProvider implements ServiceProviderInterface {
+class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\BootableProviderInterface {
 
 	private $config;
 
@@ -28,102 +27,102 @@ class ServicesProvider implements ServiceProviderInterface {
 		$this->config = $config;
 	}
 
-	public function register(Application $app) {
+	public function register(\Pimple\Container $container) {
 		$config = $this->config;
 
-		$app['user'] = null;
+		$container['user'] = null;
 
-		$app['devture_user.roles'] = $config['roles'];
+		$container['devture_user.roles'] = $config['roles'];
 
-		$app['devture_user.db'] = $app->share(function ($app) use ($config) {
-			return $app[$config['database_service_id']];
-		});
+		$container['devture_user.db'] = function ($container) use ($config) {
+			return $container[$config['database_service_id']];
+		};
 
 		if ($config['database_type'] === 'relational') {
-			$app['devture_user.repository'] = $app->share(function ($app) {
-				return new Repository\Relational\UserRepository($app['devture_user.db']);
-			});
+			$container['devture_user.repository'] = function ($container) {
+				return new Repository\Relational\UserRepository($container['devture_user.db']);
+			};
 		} else if ($config['database_type'] === 'mongodb') {
-			$app['devture_user.repository'] = $app->share(function ($app) {
-				return new Repository\MongoDB\UserRepository($app['devture_user.db']);
-			});
+			$container['devture_user.repository'] = function ($container) {
+				return new Repository\MongoDB\UserRepository($container['devture_user.db']);
+			};
 		} else {
 			throw new \InvalidArgumentException('Unrecognized database type: ' . $config['database_type']);
 		}
 
-		$app['devture_user.password_encoder'] = $app->share(function ($app) use ($config) {
+		$container['devture_user.password_encoder'] = function ($container) use ($config) {
 			return new Helper\PasswordEncoder($config['blowfish_cost']);
-		});
-
-		$app['devture_user.auth_helper'] = $app->share(function ($app) use ($config) {
-			return new Helper\AuthHelper($app['devture_user.repository'], $app['devture_user.password_encoder'], $config['password_token_salt']);
-		});
-
-		$app['devture_user.login_manager'] = $app->share(function ($app) use ($config) {
-			return new Helper\LoginManager($app['devture_user.auth_helper'], $config['cookie_signing_secret'], $config['cookie_path']);
-		});
-
-		$app['devture_user.access_control'] = $app->share(function ($app) {
-			return new AccessControl\AccessControl($app);
-		});
-
-		$app['devture_user.validator'] = function ($app) {
-			return new Validator\UserValidator($app['devture_user.repository'], $app['devture_user.roles']);
 		};
 
-		$app['devture_user.form_binder'] = function ($app) {
-			$binder = new Form\FormBinder($app['devture_user.validator'], $app['devture_user.password_encoder']);
-			$binder->setCsrfProtection($app['devture_framework.csrf_token_manager'], 'user');
+		$container['devture_user.auth_helper'] = function ($container) use ($config) {
+			return new Helper\AuthHelper($container['devture_user.repository'], $container['devture_user.password_encoder'], $config['password_token_salt']);
+		};
+
+		$container['devture_user.login_manager'] = function ($container) use ($config) {
+			return new Helper\LoginManager($container['devture_user.auth_helper'], $config['cookie_signing_secret'], $config['cookie_path']);
+		};
+
+		$container['devture_user.access_control'] = function ($container) {
+			return new AccessControl\AccessControl($container);
+		};
+
+		$container['devture_user.validator'] = function ($container) {
+			return new Validator\UserValidator($container['devture_user.repository'], $container['devture_user.roles']);
+		};
+
+		$container['devture_user.form_binder'] = function ($container) {
+			$binder = new Form\FormBinder($container['devture_user.validator'], $container['devture_user.password_encoder']);
+			$binder->setCsrfProtection($container['devture_framework.csrf_token_manager'], 'user');
 			return $binder;
 		};
 
-		$app['devture_user.listener.user_from_request_initializer'] = $app->protect(function (Request $request) use ($app) {
-			$app['user'] = $app['devture_user.login_manager']->createUserFromRequest($request);
+		$container['devture_user.listener.user_from_request_initializer'] = $container->protect(function (Request $request) use ($container) {
+			$container['user'] = $container['devture_user.login_manager']->createUserFromRequest($request);
 		});
 
-		$app['devture_user.listener.csrf_token_manager_salter'] = $app->protect(function (Request $request) use ($app) {
-			if ($app['user'] instanceof Model\User) {
-				$app['devture_framework.csrf_token_manager']->setSalt($app['user']->getUsername());
+		$container['devture_user.listener.csrf_token_manager_salter'] = $container->protect(function (Request $request) use ($container) {
+			if ($container['user'] instanceof Model\User) {
+				$container['devture_framework.csrf_token_manager']->setSalt($container['user']->getUsername());
 			}
 		});
 
-		$app['devture_user.listener.conditional_session_extender'] = $app->protect(function (Request $request, Response $response) use ($app) {
-			if ($app['user'] instanceof Model\User) {
-				$app['devture_user.login_manager']->extendSessionIfNeeded($app['user'], $request, $response);
+		$container['devture_user.listener.conditional_session_extender'] = $container->protect(function (Request $request, Response $response) use ($container) {
+			if ($container['user'] instanceof Model\User) {
+				$container['devture_user.login_manager']->extendSessionIfNeeded($container['user'], $request, $response);
 			}
 		});
 
-		$app['devture_user.twig.user_extension'] = $app->share(function ($app) {
-			return new Twig\UserExtension($app['devture_user.access_control'], $app);
-		});
+		$container['devture_user.twig.user_extension'] = function ($container) {
+			return new Twig\UserExtension($container['devture_user.access_control'], $container);
+		};
 
-		$this->registerConsoleServices($app);
+		$this->registerConsoleServices($container);
 
-		$this->registerControllerServices($app);
+		$this->registerControllerServices($container);
 	}
 
-	private function registerConsoleServices(Application $app) {
-		$app['devture_user.console.command.add_user'] = function ($app) {
-			return new ConsoleCommand\AddUserCommand($app);
+	private function registerConsoleServices(Application $container) {
+		$container['devture_user.console.command.add_user'] = function ($container) {
+			return new ConsoleCommand\AddUserCommand($container);
 		};
-		$app['devture_user.console.command.change_user_password'] = function ($app) {
-			return new ConsoleCommand\ChangeUserPasswordCommand($app);
+		$container['devture_user.console.command.change_user_password'] = function ($container) {
+			return new ConsoleCommand\ChangeUserPasswordCommand($container);
 		};
 	}
 
-	private function registerControllerServices(Application $app) {
-		$app['devture_user.controllers_provider.management'] = $app->share(function ($app) {
+	private function registerControllerServices(Application $container) {
+		$container['devture_user.controllers_provider.management'] = function ($container) {
 			return new Controller\ControllersProvider();
-		});
+		};
 
-		$app['devture_user.controller.user'] = $app->share(function ($app) {
-			return new Controller\UserController($app, 'devture_user');
-		});
+		$container['devture_user.controller.user'] = function ($container) {
+			return new Controller\UserController($container, 'devture_user');
+		};
 
-		$app['devture_user.public_routes'] = array('devture_user.login', 'devture_user.logout', 'devture_user.logged_out');
+		$container['devture_user.public_routes'] = array('devture_user.login', 'devture_user.logout', 'devture_user.logged_out');
 	}
 
-	public function boot(Application $app) {
+	public function boot(\Silex\Application $app) {
 		$app['devture_localization.translator.resource_loader']->addResources(dirname(__FILE__) . '/Resources/translations/');
 
 		$app->before($app['devture_user.listener.user_from_request_initializer']);

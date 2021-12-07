@@ -93,7 +93,10 @@ class AccessControl {
 	 * @return Request
 	 */
 	private function getRequest() {
-		return $this->app['request'];
+		/** @var \Symfony\Component\HttpFoundation\RequestStack */
+		$requestStack = $this->app['request_stack'];
+
+		return $requestStack->getCurrentRequest();
 	}
 
 }

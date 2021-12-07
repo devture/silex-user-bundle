@@ -3,23 +3,22 @@
 	"type": "library",
 	"description": "Silex bundle that provides user management, authentication and authorization.",
 	"keywords": ["silex", "bundle", "user management", "authentication", "authorization"],
-	"license": "BSD",
+	"license": "BSD-3-Clause",
 	"authors": [
 		{
 			"name": "Slavi Pantaleev",
-			"email": "s.pantaleev@gmail.com"
+			"email": "slavi@devture.com"
 		}
 	],
 	"require": {
-		"php": ">=5.3.0",
-		"silex/silex": ">=1.0,<1.4",
-		"devture/silex-framework-bundle": "1.0.*",
-		"devture/silex-localization-bundle": "2.*",
+		"php": ">=7.0.0",
+		"silex/silex": ">=2.0,<3.0",
+		"devture/silex-framework-bundle": "2.*",
+		"devture/silex-localization-bundle": "3.*",
 		"devture/dbal": "1.*"
 	},
 	"suggest": {
-		"symfony/console": "To use the console commands",
-		"ircmaxell/password-compat": "To be able to hash bcrypt passwords on PHP<5.5"
+		"symfony/console": "To use the console commands"
 	},
 	"autoload": {
 		"psr-0": {

@@ -14,7 +14,7 @@ class ChangeUserPasswordCommand extends Command {
 
 	private $container;
 
-	public function __construct(\Pimple $container) {
+	public function __construct(\Pimple\Container $container) {
 		parent::__construct('devture-user:change-password');
 		$this->container = $container;
 	}
